@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\windows\CMakeFiles\c2e9b3ae50c8fa24de7bc1b034843b5e\flutter_windows.dll.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\windows\CMakeFiles\32998da824e5a14fd40ec3601e280f58\flutter_assemble.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\windows\flutter\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\windows\flutter\CMakeFiles\flutter_assemble" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{BB1DEB9C-128D-346F-B161-0E2651F3136D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
