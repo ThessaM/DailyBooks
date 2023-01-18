@@ -22,7 +22,17 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            // primarySwatch: Colors.blue,
+            // primarySwatch: Colors.deepOrange,
+            // canvasColor: Color.fromARGB(255, 41, 41, 41),
+            // canvasColor: Color(0xff121212),
+            colorScheme: ColorScheme.dark(
+              primary: Colors.deepOrange,
+              onPrimary: Colors.white,
+              secondary: Colors.deepOrange,
+              onSecondary: Colors.white,
+              surface: Colors.deepOrange
+            )
           ),
           // home: const Register(),
           onGenerateRoute: RouterGenerator.generateRoute,
@@ -32,6 +42,9 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
 
 
 // class MyApp extends StatelessWidget {

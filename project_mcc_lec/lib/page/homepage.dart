@@ -1,6 +1,7 @@
 // import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/page/cart_screen.dart';
 import 'package:project_mcc_lec/page/cartpage.dart';
 import 'package:project_mcc_lec/class/book.dart';
@@ -105,8 +106,10 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 60,
               child: ListTile(
-                textColor: Colors.red.shade700.withOpacity(0.75),
-                iconColor: Colors.red.shade700.withOpacity(0.75),
+                // textColor: Colors.red.shade700,
+                // iconColor: Colors.red.shade700,
+                textColor: Colors.deepOrange,
+                iconColor: Colors.deepOrange,
                 title: Text(
                   "Logout",
                   style: TextStyle(
@@ -130,7 +133,7 @@ class _HomePageState extends State<HomePage> {
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen())),
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage())),
               // Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(books: books, bookIndex: 0,))),
               //ganti route ke cart page
             child: Icon(Icons.shopping_cart_outlined),
@@ -254,6 +257,7 @@ class BookListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var priceFormat = NumberFormat.simpleCurrency(name: '',);
     return GestureDetector(
       onTap: () => {
         //ubah ke detail book page
@@ -290,11 +294,11 @@ class BookListCard extends StatelessWidget {
           ),
           SizedBox(height: 5,),
           Text(
-            'Rp.${bookdetail.bookPrice}',
+            'Rp.${priceFormat.format(bookdetail.bookPrice)}',
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Color.fromARGB(255, 92, 92, 92)     
+              color: Color.fromARGB(223, 255, 255, 255),
             ),
           ),
           // SizedBox(height: 10,),
@@ -345,7 +349,7 @@ class LogoutAlert extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       titleTextStyle: const TextStyle(
-          color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
+          fontSize: 25, fontWeight: FontWeight.bold),
       titlePadding: EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 25),
       buttonPadding: EdgeInsets.zero,
       actions: [
@@ -353,7 +357,7 @@ class LogoutAlert extends StatelessWidget {
           decoration: const BoxDecoration(
               border: Border.symmetric(
                   horizontal: BorderSide(
-                      color: Color.fromARGB(136, 216, 216, 216), width: 2))),
+                      color: Color.fromARGB(133, 48, 48, 48), width: 2))),
           // width: double.infinity,
           child: CupertinoDialogAction(
             child: Text('Logout'),
@@ -371,21 +375,20 @@ class LogoutAlert extends StatelessWidget {
         ),
         CupertinoDialogAction(
           child: Text('Cancel'),
-          textStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          // textStyle: TextStyle(fontWeight: FontWeight.w600),
           onPressed: () {
             Navigator.pop(context);
           },
         )
       ],
       elevation: 24,
-      backgroundColor: Color.fromARGB(240, 255, 255, 255),
+      // backgroundColor: Color.fromARGB(240, 255, 255, 255),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
     );
   }
 }
-
-
 
 
 

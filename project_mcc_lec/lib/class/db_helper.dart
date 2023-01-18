@@ -25,7 +25,9 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE cart(id INTEGER PRIMARY KEY, bookTitle VARCHAR UNIQUE, bookPrice INTEGER, quantity INTEGER, bookPath TEXT)');
+        // 'CREATE TABLE user(id INTEGER PRIMARY KEY, username VARCHAR UNIQUE, email TEXT, password TEXT)'
+        'CREATE TABLE cart(id INTEGER PRIMARY KEY, bookTitle VARCHAR UNIQUE, bookPrice INTEGER, quantity INTEGER, bookPath TEXT)'
+      );
   }
 
   Future<Cart> insert(Cart cart) async {

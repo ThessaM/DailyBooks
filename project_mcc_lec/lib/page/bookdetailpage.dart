@@ -1,6 +1,7 @@
 // import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 // import 'package:project_mcc_lec/cart_screen.dart';
 // import 'package:flutter/src/foundation/key.dart';
 // import 'package:flutter/src/widgets/framework.dart';
@@ -30,6 +31,7 @@ class BookDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final cart = Provider.of<CartProvider>(context);
+    var priceFormat = NumberFormat.simpleCurrency(name: '',);
 
     void saveData(int index) {
       dbHelper
@@ -100,11 +102,11 @@ class BookDetailPage extends StatelessWidget {
                 ),
                 BookDetailSeparator(),
                 Text(
-                  'Rp.${selectedBook.bookPrice}',
+                  'Rp.${priceFormat.format(selectedBook.bookPrice)}',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 92, 92, 92)     
+                    // color: Color.fromARGB(255, 92, 92, 92)     
                   ),
                 ),
                 BookDetailSeparator(),
@@ -136,7 +138,7 @@ class BookDetailPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 92, 92, 92),
+                    color: Color.fromARGB(223, 255, 255, 255),
                     wordSpacing: 2     
                   ),
                   textAlign: TextAlign.justify,
@@ -156,7 +158,7 @@ class BookDetailPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 92, 92, 92)     
+                    color: Color.fromARGB(223, 255, 255, 255),
                   ),
                   textAlign: TextAlign.justify,
                 ),
@@ -256,13 +258,14 @@ class AddBookToCartAlertDialog extends StatelessWidget {
       // insetPadding: EdgeInsets.all(75),
       title: Text("Book added to cart successfully", textAlign: TextAlign.center,),
       titleTextStyle: const TextStyle(
-        color: Colors.black,
+        // color: Colors.black,
         fontSize: 20,
         fontWeight: FontWeight.w500
       ),
       content: Text("Tap anywhere outside this box to continue", textAlign: TextAlign.center,),
       contentTextStyle: const TextStyle(
-        color: Colors.grey
+        // color: Colors.grey
+        color: Colors.deepOrange
       ),
       // contentPadding: EdgeInsets.fromLTRB(36, 20, 36, 36),
       shape: RoundedRectangleBorder(

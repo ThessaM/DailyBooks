@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter/src/foundation/key.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
@@ -7,17 +8,18 @@ import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:provider/provider.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+class CartPage extends StatefulWidget {
+  const CartPage({Key? key}) : super(key: key);
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  State<CartPage> createState() => _CartPageState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _CartPageState extends State<CartPage> {
 
   DBHelper? dbHelper = DBHelper();
   List<bool> tapped = [];
+  var priceFormat = NumberFormat.simpleCurrency(name: '',);
   
   @override
   void initState() {
@@ -68,12 +70,12 @@ class _CartScreenState extends State<CartScreen> {
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                   ));
                 } else {
-                  return ListView.builder(
+                  return ListView.separated(
                       shrinkWrap: true,
                       itemCount: provider.cart.length,
                       itemBuilder: (context, index) {
                         return Card(
-                          color: Colors.blueGrey.shade200,
+                          color: Color.fromARGB(255, 73, 73, 73),
                           elevation: 5.0,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                           child: Padding(
@@ -113,34 +115,26 @@ class _CartScreenState extends State<CartScreen> {
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           text: TextSpan(
-                                              text: '',
-                                              style: TextStyle(
-                                                  color: Colors.blueGrey.shade800,
-                                                  fontSize: 16.0),
-                                              children: [
-                                                TextSpan(
-                                                    text:
-                                                        '${provider.cart[index].bookTitle}\n',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ]),
+                                            text: '${provider.cart[index].bookTitle}\n',
+                                            style: const TextStyle(
+                                                fontWeight:FontWeight.bold, fontSize: 16
+                                            )
+                                          )
                                         ),
                                         RichText(
                                           maxLines: 1,
                                           text: TextSpan(
-                                              text: "Rp. ",
-                                              style: TextStyle(
-                                                  color: Colors.blueGrey.shade800,
-                                                  fontSize: 16.0),
-                                              children: [
-                                                TextSpan(
-                                                    text:
-                                                        '${provider.cart[index].bookPrice}\n',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ]),
+                                            text: "Rp. ",
+                                            style: TextStyle(fontSize: 16.0),
+                                            children: [
+                                              TextSpan(
+                                                text: '${priceFormat.format(provider.cart[index].bookPrice)}\n',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold
+                                                )
+                                              ),
+                                            ]
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -151,141 +145,74 @@ class _CartScreenState extends State<CartScreen> {
                                 Row(
                                   children: [
                                     ValueListenableBuilder<int>(
-                                      valueListenable:
-                                          provider.cart[index].quantity!,
+                                      valueListenable: provider.cart[index].quantity!,
                                       builder: (context, val, child) {
                                         return PlusMinusButtons(
                                           addQuantity: () {
-                                            cart.addQuantity(
-                                                provider.cart[index].id!);
-                                            dbHelper!
-                                                .updateQuantity(Cart(
-                                                    id: index,
-                                                    bookTitle: provider
-                                                        .cart[index].bookTitle,
-                                                    bookPrice: provider
-                                                        .cart[index].bookPrice,
-                                                    // productId: index.toString(),
-                                                    // productName: provider
-                                                    //     .cart[index].productName,
-                                                    // initialPrice: provider
-                                                    //     .cart[index].initialPrice,
-                                                    // productPrice: provider
-                                                    //     .cart[index].productPrice,
-                                                    quantity: ValueNotifier(
-                                                        provider.cart[index]
-                                                            .quantity!.value),
-                                                    // unitTag: provider
-                                                    //     .cart[index].unitTag,
-                                                    // image: provider
-                                                    //     .cart[index].bookPath
-                                                    bookPath: provider
-                                                        .cart[index].bookPath
-                                                    // book: provider.cart[index].book
-                                                    ))
-                                                .then((value) {
+                                            cart.addQuantity(provider.cart[index].id!);
+                                            dbHelper!.updateQuantity(
+                                              Cart(
+                                                id: index,
+                                                bookTitle: provider.cart[index].bookTitle,
+                                                bookPrice: provider.cart[index].bookPrice,
+                                                quantity: ValueNotifier(
+                                                  provider.cart[index].quantity!.value
+                                                ),
+                                                bookPath: provider.cart[index].bookPath
+                                                // book: provider.cart[index].book
+                                              )
+                                            ).then((value) {
                                               setState(() {
                                                 cart.addTotalPrice(double.parse(
-                                                    provider.cart[index].bookPrice
-                                                        .toString()));
+                                                  provider.cart[index].bookPrice.toString()
+                                                ));
                                               });
                                             });
                                           },
                                           deleteQuantity: () {
-                                            cart.deleteQuantity(
-                                                provider.cart[index].id!);
+                                            cart.deleteQuantity(provider.cart[index].id!);
                                             cart.removeTotalPrice(double.parse(
-                                                provider.cart[index].bookPrice
-                                                    .toString()));
+                                              provider.cart[index].bookPrice.toString()
+                                            ));
                                           },
                                           text: val.toString(),
                                         );
-                                      }),
-                                  IconButton(
-                                      onPressed: () {
-                                        dbHelper!.deleteCartItem(
-                                            provider.cart[index].id!);
-                                        provider
-                                            .removeItem(provider.cart[index].id!);
-                                        provider.removeCounter();
-                                      },
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.red.shade800,
-                                      )),
+                                     }
+                                    ),
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      ClipOval(child: Container(height: 36, width: 36, color: Colors.red.withOpacity(0.75),)),
+                                      IconButton(
+                                        onPressed: () {
+                                          dbHelper!.deleteCartItem(provider.cart[index].id!);
+                                          provider.removeItem(provider.cart[index].id!);
+                                          provider.removeCounter();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Book Removed From Cart'),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        },
+                                        icon: Icon(
+                                          Icons.delete_forever_rounded,
+                                          // color: Colors.red.shade800,
+                                          color: Colors.white,
+                                        )
+                                      ),
+                                    ],
+                                  ),
                                     SizedBox(width: 10,)
                                   ],
                                 ),
-
-                                // ValueListenableBuilder<int>(
-                                //     valueListenable:
-                                //         provider.cart[index].quantity!,
-                                //     builder: (context, val, child) {
-                                //       return PlusMinusButtons(
-                                //         addQuantity: () {
-                                //           cart.addQuantity(
-                                //               provider.cart[index].id!);
-                                //           dbHelper!
-                                //               .updateQuantity(Cart(
-                                //                   id: index,
-                                //                   bookTitle: provider
-                                //                       .cart[index].bookTitle,
-                                //                   bookPrice: provider
-                                //                       .cart[index].bookPrice,
-                                //                   // productId: index.toString(),
-                                //                   // productName: provider
-                                //                   //     .cart[index].productName,
-                                //                   // initialPrice: provider
-                                //                   //     .cart[index].initialPrice,
-                                //                   // productPrice: provider
-                                //                   //     .cart[index].productPrice,
-                                //                   quantity: ValueNotifier(
-                                //                       provider.cart[index]
-                                //                           .quantity!.value),
-                                //                   // unitTag: provider
-                                //                   //     .cart[index].unitTag,
-                                //                   // image: provider
-                                //                   //     .cart[index].bookPath
-                                //                   bookPath: provider
-                                //                       .cart[index].bookPath
-                                //                   // book: provider.cart[index].book
-                                //                   ))
-                                //               .then((value) {
-                                //             setState(() {
-                                //               cart.addTotalPrice(double.parse(
-                                //                   provider.cart[index].bookPrice
-                                //                       .toString()));
-                                //             });
-                                //           });
-                                //         },
-                                //         deleteQuantity: () {
-                                //           cart.deleteQuantity(
-                                //               provider.cart[index].id!);
-                                //           cart.removeTotalPrice(double.parse(
-                                //               provider.cart[index].bookPrice
-                                //                   .toString()));
-                                //         },
-                                //         text: val.toString(),
-                                //       );
-                                //     }),
-                                // IconButton(
-                                //     onPressed: () {
-                                //       dbHelper!.deleteCartItem(
-                                //           provider.cart[index].id!);
-                                //       provider
-                                //           .removeItem(provider.cart[index].id!);
-                                //       provider.removeCounter();
-                                //     },
-                                //     icon: Icon(
-                                //       Icons.delete,
-                                //       color: Colors.red.shade800,
-                                //     )),
-                                // SizedBox(width: 5,),
                               ],
                             ),
                           ),
                         );
-                      });
+                      },
+                      separatorBuilder: (BuildContext context, int index) => const Divider(height: 5,),
+                    );
                 }
               },
             ),
@@ -305,7 +232,8 @@ class _CartScreenState extends State<CartScreen> {
                       builder: (context, val, child) {
                         return ReusableWidget(
                             title: 'Sub-Total',
-                            value: r'Rp.' + (val?.toStringAsFixed(2) ?? '0'));
+                            // value: r'Rp.' + (val?.toStringAsFixed(2) ?? '0'));
+                            value: r'Rp. ' + (val == null? '0' : priceFormat.format(val)));
                       }),
                 ],
               );
@@ -323,7 +251,7 @@ class _CartScreenState extends State<CartScreen> {
           );
         },
         child: Container(
-          color: Colors.yellow.shade600,
+          color: Colors.deepOrange,
           alignment: Alignment.center,
           height: 50.0,
           child: const Text(
