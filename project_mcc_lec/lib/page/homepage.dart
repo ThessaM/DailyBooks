@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/page/cart_screen.dart';
 import 'package:project_mcc_lec/page/cartpage.dart';
 import 'package:project_mcc_lec/class/book.dart';
@@ -10,11 +11,12 @@ import 'package:project_mcc_lec/page/loginpage.dart';
 // import 'package:flutter/src/foundation/key.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/route.dart';
+import 'package:provider/provider.dart';
 
 /*
 [] navigasi drawer -> profile page, history
-[] navigasi booklistcard -> ke page detail book
-[] navigasi floating action button -> ke cart pages
+[v] navigasi booklistcard -> ke page detail book
+[v] navigasi floating action button -> ke cart pages
 */
 
 class HomePage extends StatefulWidget {
@@ -35,7 +37,15 @@ class _HomePageState extends State<HomePage> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<CartProvider>().getData();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -126,6 +136,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Container(
         margin: EdgeInsets.all(10),
         height: 70,

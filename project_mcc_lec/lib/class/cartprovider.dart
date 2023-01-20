@@ -51,6 +51,7 @@ class CartProvider with ChangeNotifier {
   int getCounter() {
     _getPrefsItems();
     return _counter;
+    // return 0;
   }
 
   void addQuantity(int id) {
@@ -75,6 +76,13 @@ class CartProvider with ChangeNotifier {
   void removeItem(int id) {
     final index = cart.indexWhere((element) => element.id == id);
     cart.removeAt(index);
+    _setPrefsItems();
+    notifyListeners();
+  }
+
+  void clearCart(){
+    DBHelper.deleteAll();
+    cart.clear();
     _setPrefsItems();
     notifyListeners();
   }

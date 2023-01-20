@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
+import 'package:project_mcc_lec/class/route.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
@@ -37,6 +38,7 @@ class _CartPageState extends State<CartPage> {
         title: const Text('My Shopping Cart'),
         actions: [
           Badge(
+            badgeColor: Colors.black54,
             badgeContent: Consumer<CartProvider>(
               builder: (context, value, child) {
                 return Text(
@@ -190,8 +192,8 @@ class _CartPageState extends State<CartPage> {
                                           provider.removeCounter();
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             const SnackBar(
-                                              content: Text('Book Removed From Cart'),
-                                              duration: Duration(seconds: 2),
+                                              content: Text('Book Removed From Cart', style: TextStyle(color: Colors.deepOrange)),
+                                              duration: Duration(seconds: 1),
                                             ),
                                           );
                                         },
@@ -243,12 +245,27 @@ class _CartPageState extends State<CartPage> {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Payment Successful'),
-              duration: Duration(seconds: 2),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(
+          //     content: Text('Payment Successful'),
+          //     duration: Duration(seconds: 2),
+          //   ),
+          // );
+          if(cart.getCounter() == 0){
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('No Item In Cart', style: TextStyle(color: Colors.deepOrange),),
+                duration: Duration(seconds: 1),
+              ),
+            );
+          }else{
+            Navigator.push(context, RouterGenerator.generateRoute(
+                RouteSettings(
+                  name: '/payment'
+                )
+              )
+            );
+          }
         },
         child: Container(
           color: Colors.deepOrange,

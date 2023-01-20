@@ -16,7 +16,8 @@ import 'package:provider/provider.dart';
 
 /*
 [v] atur icon favorite -- floating action button
-[] sambungin database - data add to cart, favorite, disesuaiin data user
+[v] sambungin database - data add to cart
+[] sambungin database - favorite, disesuaiin data user
 [v] habis add to cart -> lgsg balik ke homepage aja + alert dialog
 */
 
@@ -162,42 +163,64 @@ class BookDetailPage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.justify,
                 ),
-                BookDetailSeparator(value: 20,),
-                ElevatedButton( // login button
-                  onPressed: () {
-                    // tambahin ke cart + database                 
-                    // Navigator.push(context, RouterGenerator.generateRoute(
-                    //     RouteSettings(
-                    //       name: '/home',
-                    //     )
-                    //   )
-                    // );
-                    saveData(selectedBook.bookId);
-                    Navigator.pop(context);
-                    showDialog(
-                        context: context, 
-                        builder: (_) => AddBookToCartAlertDialog()
-                    );
-                  }, 
-                  child: Text(
-                    "Add To Cart",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32)
-                    ),
-                    minimumSize: Size(100, 60)
-                  ), 
-                ),
+                BookDetailSeparator(value: 70,),
+                // ElevatedButton( // login button
+                //   onPressed: () {
+                //     // tambahin ke cart + database                 
+                //     // Navigator.push(context, RouterGenerator.generateRoute(
+                //     //     RouteSettings(
+                //     //       name: '/home',
+                //     //     )
+                //     //   )
+                //     // );
+                //     saveData(selectedBook.bookId);
+                //     Navigator.pop(context);
+                //     showDialog(
+                //         context: context, 
+                //         builder: (_) => AddBookToCartAlertDialog()
+                //     );
+                //   }, 
+                //   child: Text(
+                //     "Add To Cart",
+                //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                //   ),
+                //   style: ElevatedButton.styleFrom(
+                //     elevation: 3,
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(32)
+                //     ),
+                //     minimumSize: Size(100, 60)
+                //   ), 
+                // ),
               ],
             ),
           ),
         )
       ),
       //atur action
-      floatingActionButton: FavoriteButton(),
+      // floatingActionButton: FavoriteButton(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(width: 100,),
+          FloatingActionButton.extended(
+            // heroTag: "Test",
+            // elevation: 3,
+            onPressed: () {
+              saveData(selectedBook.bookId);
+              Navigator.pop(context);
+              showDialog(
+                  context: context, 
+                  builder: (_) => AddBookToCartAlertDialog()
+              );
+              
+            }, 
+            label: Text('Add To Cart', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+          ),
+          FavoriteButton()
+        ],
+      ),
     );
   }
 }
@@ -213,6 +236,8 @@ class BookDetailSeparator extends StatelessWidget {
     return SizedBox(height: value != null? value:10,);
   }
 }
+
+
 
 class FavoriteButton extends StatefulWidget {
   const FavoriteButton({Key? key}) : super(key: key);

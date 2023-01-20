@@ -35,11 +35,11 @@ class LoginPage extends StatelessWidget {
                 height: 100,
                 // child: SvgPicture.asset('assets/logo/Logo HE FISH (2).svg'),
                 // child: Image(image: AssetImage('assets/Logo/Logo_HE_FISH.png', package: 'assets/Logo')),
-                // child: Image.asset('assets/Logo/Logo_HE_FISH.png'),
+                child: Image.asset('assets/Logo/Logo.png'),
               ),
       
               SizedBox( // spacing
-                height: 36,
+                height: 80,
               ),
       
               TextFormField( // username

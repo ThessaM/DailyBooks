@@ -60,4 +60,9 @@ class DBHelper {
         await dbClient!.query('cart', where: 'id = ?', whereArgs: [id]);
     return queryIdResult.map((e) => Cart.fromMap(e)).toList();
   }
+
+  static Future deleteAll() async{
+    final db = await DBHelper().database;
+    return db!.rawQuery("DELETE FROM cart");
+  }
 }
