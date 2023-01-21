@@ -1,14 +1,17 @@
 // import 'package:flutter/cupertino.dart';
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/class/user.dart';
+import 'package:project_mcc_lec/page/homepage.dart';
 // import 'package:project_mcc_lec/page/temppage.dart';
 
 
 /*
 [v] validasi (login) & API -- username + password
-[v] API Google Sign in
+[] API Google Sign in
 */
 
 
@@ -73,98 +76,11 @@ class LoginPage extends StatelessWidget {
                 obscureText: true,
                 controller: passwordController,
               ),
-      
-              SizedBox( // spacing
-                height: 44,
-              ),
-      
-              ElevatedButton( // login button
-                onPressed: () async{
-                  // masukin validasi
-                  if(validasi(usernameController, passwordController, context)){
-                    List<User> users = await dbHelper.getUser();
-                    bool found = false;
 
-                    if(users.isNotEmpty){
-                      for(int i = 0; i<users.length; i++){
-                        if(usernameController.text == users[i].username && passwordController.text == users[i].password){
-                          accessSuccessSnackbar(context);
-                          Navigator.push(context, RouterGenerator.generateRoute(
-                              RouteSettings(
-                                name: '/home',
-                              )
-                            )
-                          );
-                          found = true;
-                          break;
-                        }
-                      }
-                      if(found == false) accessDeniedSnackbar(context);
-                    }else{
-                      accessDeniedSnackbar(context);
-                    }
-                  }
-                }, 
-                child: Text(
-                  "Login",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32)
-                  ),
-                  minimumSize: Size(100, 50)
-                ), 
-              ),
-      
               SizedBox( // spacing
-                height: 24,
+                height: 10,
               ),
-      
-              Text('or'), // text 'or'
-      
-              SizedBox( // spacing
-                height: 24,
-              ),
-              
-              ElevatedButton( // google login button
-                onPressed: () {
-                  // masukin validasi
-                  Navigator.push(context, RouterGenerator.generateRoute(
-                      RouteSettings(
-                        name: '/',
-                      )
-                    )
-                  );
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => TempPage()));
-                }, 
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset('assets/Logo/logo_Google.png'),
-                    Text(
-                      "Login with Google",
-                      style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold)
-                    ),
-                  ],
-                ),
-                style: ElevatedButton.styleFrom(
-                  alignment: Alignment.center,
-                  primary: Colors.white,
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32)
-                  ),
-                  minimumSize: Size(100, 50),
-                  maximumSize: Size(220, 70)
-                ), 
-              ),
-      
-              SizedBox( // spacing
-                height: 44,
-              ),
-      
+
               Row( // ke register
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -185,7 +101,110 @@ class LoginPage extends StatelessWidget {
                     ),
                   )
                 ],
-              )
+              ),
+      
+              SizedBox( // spacing
+                height: 44,
+              ),
+      
+              ElevatedButton( // login button
+                onPressed: () async{
+                  // masukin validasi
+                  if(validasi(usernameController, passwordController, context)){
+                    List<User> users = await dbHelper.getUser();
+                    bool foundUsername = false;
+                    bool found = false;
+
+                    if(users.isNotEmpty){
+                      for(int i = 0; i<users.length; i++){
+                        if(usernameController.text == users[i].username && passwordController.text == users[i].password){
+                          accessSuccessSnackbar(context);
+                          // Navigator.push(context, RouterGenerator.generateRoute(
+                          //     RouteSettings(
+                          //       name: '/home',
+                          //     )
+                          //   )
+                          // );
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => HomePage(currentUserId: users[i].id))
+                          );
+                          found = true;
+                          foundUsername = true;
+                          break;
+                        }else if(usernameController.text == users[i].username){
+                          foundUsername = true;
+                        }
+                      }
+                      if(foundUsername == false) userNotFoundSnackbar(context);
+                      else if (found == false && foundUsername == true) accessDeniedSnackbar(context);
+                    }else{
+                      userNotFoundSnackbar(context);
+                    }
+                    // if(found == false) accessDeniedSnackbar(context);
+                  }
+                }, 
+                child: Text(
+                  "Login",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                style: ElevatedButton.styleFrom(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32)
+                  ),
+                  minimumSize: Size(100, 50)
+                ), 
+              ),
+      
+              // SizedBox( // spacing
+              //   height: 24,
+              // ),
+      
+              // Text('or'), // text 'or'
+      
+              // SizedBox( // spacing
+              //   height: 24,
+              // ),
+              
+              // ElevatedButton( // google login button
+              //   onPressed: () {
+              //     // masukin validasi
+              //     Navigator.push(context, RouterGenerator.generateRoute(
+              //         RouteSettings(
+              //           name: '/',
+              //         )
+              //       )
+              //     );
+              //     // Navigator.push(context, MaterialPageRoute(builder: (context) => TempPage()));
+              //   }, 
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //     children: [
+              //       Image.asset('assets/Logo/logo_Google.png'),
+              //       Text(
+              //         "Login with Google",
+              //         style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold)
+              //       ),
+              //     ],
+              //   ),
+              //   style: ElevatedButton.styleFrom(
+              //     alignment: Alignment.center,
+              //     primary: Colors.white,
+              //     elevation: 3,
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(32)
+              //     ),
+              //     minimumSize: Size(100, 50),
+              //     maximumSize: Size(220, 70)
+              //   ), 
+              // ),
+      
+              SizedBox( // spacing
+                height: 44,
+              ),
+      
+              
             ]
           ),
         ),
@@ -222,6 +241,14 @@ void accessDeniedSnackbar(context){
 void accessSuccessSnackbar(context){
   const snackbar = SnackBar(
     content: DefaultSnackBar(title: "Login Success"),
+    duration: Duration(seconds: 1),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+}
+
+void userNotFoundSnackbar(context){
+  const snackbar = SnackBar(
+    content: DefaultSnackBar(title: "User Not Found"),
     duration: Duration(seconds: 1),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackbar);

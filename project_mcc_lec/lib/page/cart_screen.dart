@@ -7,10 +7,13 @@ import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/route.dart';
+import 'package:project_mcc_lec/page/paymentpage.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({Key? key}) : super(key: key);
+  const CartPage({Key? key, required this.currentUserId}) : super(key: key);
+
+  final int? currentUserId;
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -21,6 +24,8 @@ class _CartPageState extends State<CartPage> {
   DBHelper? dbHelper = DBHelper();
   // List<bool> tapped = [];
   var priceFormat = NumberFormat.simpleCurrency(name: '',);
+  get currentUserId => widget.currentUserId;
+  // List<Cart> foundCart = [];
   
   @override
   void initState() {
@@ -32,6 +37,13 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
+
+    // void addItemToList(int ind, Cart item){
+    //   setState(() {
+    //     foundCart.insert(ind, item);
+    //   });
+    // }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -42,7 +54,7 @@ class _CartPageState extends State<CartPage> {
             badgeContent: Consumer<CartProvider>(
               builder: (context, value, child) {
                 return Text(
-                  value.getCounter().toString(),
+                  value.getCounter(currentUserId).toString(),
                   style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 );
@@ -64,6 +76,17 @@ class _CartPageState extends State<CartPage> {
           Expanded(
             child: Consumer<CartProvider>(
               builder: (BuildContext context, provider, widget) {
+
+                // int countItem = 0;
+                // List<Cart> foundCart = [];
+                // for(int i = 0; i<provider.cart.length; i++) {
+                //   if(provider.cart[i].userId == currentUserId){
+                //     // foundCart[countItem] = provider.cart[i];
+                //     addItemToList(countItem, provider.cart[i]);
+                //     countItem++;
+                //   }
+                // }
+
                 if (provider.cart.isEmpty) {
                   return const Center(
                       child: Text(
@@ -72,149 +95,184 @@ class _CartPageState extends State<CartPage> {
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                   ));
                 } else {
-                  return ListView.separated(
+                  if(cart.getCounter(currentUserId) > 0){
+                    return ListView.builder(
                       shrinkWrap: true,
                       itemCount: provider.cart.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          color: Color.fromARGB(255, 73, 73, 73),
-                          elevation: 5.0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  height: 120,
-                                  width: 80,
-                                  // constraints: BoxConstraints.expand(),
-                                  // clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(provider.cart[index].bookPath!),
-                                      fit: BoxFit.cover
-                                    ),
-                                    // borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))
-                                    borderRadius: BorderRadius.circular(15)
-                                  ),
-                                ),
-                                SizedBox(width: 5,),
-                                Flexible(
-                                  child: Container(
-                                    // width: 130,
+                        if(provider.cart[index].userId == currentUserId){
+                          return Card(
+                            color: Color.fromARGB(255, 73, 73, 73),
+                            elevation: 5.0,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                    height: 120,
+                                    width: 80,
                                     // constraints: BoxConstraints.expand(),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        RichText(
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          text: TextSpan(
-                                            text: '${provider.cart[index].bookTitle}\n',
-                                            style: const TextStyle(
-                                                fontWeight:FontWeight.bold, fontSize: 16
-                                            )
-                                          )
-                                        ),
-                                        RichText(
-                                          maxLines: 1,
-                                          text: TextSpan(
-                                            text: "Rp. ",
-                                            style: TextStyle(fontSize: 16.0),
-                                            children: [
-                                              TextSpan(
-                                                text: '${priceFormat.format(provider.cart[index].bookPrice)}\n',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold
-                                                )
-                                              ),
-                                            ]
+                                    // clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(provider.cart[index].bookPath!),
+                                        fit: BoxFit.cover
+                                      ),
+                                      // borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))
+                                      borderRadius: BorderRadius.circular(15)
+                                    ),
+                                  ),
+                                  SizedBox(width: 5,),
+                                  Flexible(
+                                    child: Container(
+                                      // width: 130,
+                                      // constraints: BoxConstraints.expand(),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const SizedBox(
+                                            height: 5.0,
                                           ),
+                                          RichText(
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            text: TextSpan(
+                                              text: '${provider.cart[index].bookTitle}\n',
+                                              style: const TextStyle(
+                                                  fontWeight:FontWeight.bold, fontSize: 16
+                                              )
+                                            )
+                                          ),
+                                          RichText(
+                                            maxLines: 1,
+                                            text: TextSpan(
+                                              text: "Rp. ",
+                                              style: TextStyle(fontSize: 15.0),
+                                              children: [
+                                                TextSpan(
+                                                  text: '${priceFormat.format(provider.cart[index].bookPrice)}\n',
+                                                  // text: '${provider.cart[index].bookPrice}\n',
+                                                  style: const TextStyle(
+                                                      fontWeight: FontWeight.bold
+                                                  )
+                                                ),
+                                              ]
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  //+- button
+
+                                  Row(
+                                    children: [
+                                      ValueListenableBuilder<int>(
+                                        valueListenable: provider.cart[index].quantity!,
+                                        builder: (context, val, child) {
+                                          return PlusMinusButtons(
+                                            addQuantity: () {
+                                              cart.addQuantity(provider.cart[index].id!, currentUserId);
+                                              dbHelper!.updateQuantity(
+                                                Cart(
+                                                  id: index,
+                                                  userId: currentUserId,
+                                                  bookTitle: provider.cart[index].bookTitle,
+                                                  bookPrice: provider.cart[index].bookPrice,
+                                                  quantity: ValueNotifier(
+                                                    provider.cart[index].quantity!.value
+                                                  ),
+                                                  bookPath: provider.cart[index].bookPath
+                                                  // book: provider.cart[index].book
+                                                )
+                                              ).then((value) {
+                                                setState(() {
+                                                  cart.addTotalPrice(double.parse(
+                                                    provider.cart[index].bookPrice.toString()
+                                                  ));
+                                                });
+                                              });
+                                            },
+                                            deleteQuantity: (){
+                                              cart.deleteQuantity(provider.cart[index].id!, currentUserId);
+                                              dbHelper!.updateQuantity(
+                                                Cart(
+                                                  id: index,
+                                                  userId: currentUserId,
+                                                  bookTitle: provider.cart[index].bookTitle,
+                                                  bookPrice: provider.cart[index].bookPrice,
+                                                  quantity: ValueNotifier(
+                                                    provider.cart[index].quantity!.value
+                                                  ),
+                                                  bookPath: provider.cart[index].bookPath
+                                                  // book: provider.cart[index].book
+                                                )
+                                              ).then((value) {
+                                                setState(() {
+                                                  cart.removeTotalPrice(double.parse(
+                                                    provider.cart[index].bookPrice.toString()
+                                                  ));
+                                                });
+                                              });
+                                              // cart.removeTotalPrice(double.parse(
+                                              //   provider.cart[index].bookPrice.toString()
+                                              // ));
+                                            },
+                                            // text: val.toString(),
+                                            text: val.toString(),
+                                          );
+                                      }
+                                      ),
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        ClipOval(child: Container(height: 36, width: 36, color: Colors.red.withOpacity(0.75),)),
+                                        IconButton(
+                                          onPressed: () {
+                                            dbHelper!.deleteCartItem(provider.cart[index].id!, currentUserId);
+                                            provider.removeItem(provider.cart[index].id!, currentUserId);
+                                            provider.removeCounter();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('Book Removed From Cart', style: TextStyle(color: Colors.deepOrange)),
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          },
+                                          icon: Icon(
+                                            Icons.delete_forever_rounded,
+                                            // color: Colors.red.shade800,
+                                            color: Colors.white,
+                                          )
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ),
-                                //+- button
-
-                                Row(
-                                  children: [
-                                    ValueListenableBuilder<int>(
-                                      valueListenable: provider.cart[index].quantity!,
-                                      builder: (context, val, child) {
-                                        return PlusMinusButtons(
-                                          addQuantity: () {
-                                            cart.addQuantity(provider.cart[index].id!);
-                                            dbHelper!.updateQuantity(
-                                              Cart(
-                                                id: index,
-                                                bookTitle: provider.cart[index].bookTitle,
-                                                bookPrice: provider.cart[index].bookPrice,
-                                                quantity: ValueNotifier(
-                                                  provider.cart[index].quantity!.value
-                                                ),
-                                                bookPath: provider.cart[index].bookPath
-                                                // book: provider.cart[index].book
-                                              )
-                                            ).then((value) {
-                                              setState(() {
-                                                cart.addTotalPrice(double.parse(
-                                                  provider.cart[index].bookPrice.toString()
-                                                ));
-                                              });
-                                            });
-                                          },
-                                          deleteQuantity: () {
-                                            cart.deleteQuantity(provider.cart[index].id!);
-                                            cart.removeTotalPrice(double.parse(
-                                              provider.cart[index].bookPrice.toString()
-                                            ));
-                                          },
-                                          text: val.toString(),
-                                        );
-                                     }
-                                    ),
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      ClipOval(child: Container(height: 36, width: 36, color: Colors.red.withOpacity(0.75),)),
-                                      IconButton(
-                                        onPressed: () {
-                                          dbHelper!.deleteCartItem(provider.cart[index].id!);
-                                          provider.removeItem(provider.cart[index].id!);
-                                          provider.removeCounter();
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Book Removed From Cart', style: TextStyle(color: Colors.deepOrange)),
-                                              duration: Duration(seconds: 1),
-                                            ),
-                                          );
-                                        },
-                                        icon: Icon(
-                                          Icons.delete_forever_rounded,
-                                          // color: Colors.red.shade800,
-                                          color: Colors.white,
-                                        )
-                                      ),
+                                      SizedBox(width: 10,)
                                     ],
                                   ),
-                                    SizedBox(width: 10,)
-                                  ],
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }else{
+                          return Container();
+                        }
                       },
-                      separatorBuilder: (BuildContext context, int index) => const Divider(height: 5,),
+                      // separatorBuilder: (BuildContext context, int index) => const Divider(height: 5,),
                     );
+                  }else{
+                    return const Center(
+                      child: Text(
+                        'Your Cart is Empty',
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+                      ));
+                  }
                 }
               },
             ),
@@ -223,9 +281,11 @@ class _CartPageState extends State<CartPage> {
             builder: (BuildContext context, value, Widget? child) {
               final ValueNotifier<int?> totalPrice = ValueNotifier(null);
               for (var element in value.cart) {
-                totalPrice.value =
+                if(element.userId == currentUserId){
+                  totalPrice.value =
                     (element.bookPrice! * element.quantity!.value) +
                         (totalPrice.value ?? 0);
+                }     
               }
               return Column(
                 children: [
@@ -251,7 +311,7 @@ class _CartPageState extends State<CartPage> {
           //     duration: Duration(seconds: 2),
           //   ),
           // );
-          if(cart.getCounter() == 0){
+          if(cart.getCounter(currentUserId) == 0){
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('No Item In Cart', style: TextStyle(color: Colors.deepOrange),),
@@ -259,11 +319,16 @@ class _CartPageState extends State<CartPage> {
               ),
             );
           }else{
-            Navigator.push(context, RouterGenerator.generateRoute(
-                RouteSettings(
-                  name: '/payment'
-                )
-              )
+            // Navigator.push(context, RouterGenerator.generateRoute(
+            //     RouteSettings(
+            //       name: '/payment'
+            //     )
+            //   )
+            // );
+            print(cart.quantity);
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => PaymentPage(currentUserId: currentUserId))
             );
           }
         },

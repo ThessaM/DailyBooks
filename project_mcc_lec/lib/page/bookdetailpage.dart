@@ -22,11 +22,12 @@ import 'package:provider/provider.dart';
 */
 
 class BookDetailPage extends StatelessWidget {
-  BookDetailPage({super.key, required this.selectedBook});
+  BookDetailPage({super.key, required this.selectedBook, required this.currentUserId});
 
   DBHelper dbHelper = DBHelper();
 
   final Book selectedBook;
+  final int currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class BookDetailPage extends StatelessWidget {
           .insertCart(
         Cart(
           id: index,
+          userId: currentUserId,
           bookTitle: selectedBook.bookTitle, 
           bookPrice: selectedBook.bookPrice,
           quantity: ValueNotifier(1), 

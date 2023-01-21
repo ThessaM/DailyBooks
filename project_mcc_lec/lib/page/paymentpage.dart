@@ -1,5 +1,7 @@
 // import 'dart:html';
 
+// import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -10,6 +12,7 @@ import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/page/cart_screen.dart';
+import 'package:project_mcc_lec/page/homepage.dart';
 import 'package:provider/provider.dart';
 
 
@@ -20,7 +23,9 @@ import 'package:provider/provider.dart';
 
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  const PaymentPage({Key? key, required this.currentUserId}) : super(key: key);
+
+  final int currentUserId;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -31,6 +36,8 @@ class _PaymentPageState extends State<PaymentPage> {
   DBHelper dbHelper = DBHelper();
   var priceFormat = NumberFormat.simpleCurrency(name: '',);
   var finalPrice = 0;
+
+  get currentUserId => widget.currentUserId;
 
   int choosedPayment = 0;
 
@@ -52,7 +59,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
-    final del = Provider.of<CartProvider>(context, listen: false);
+    // final del = Provider.of<CartProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -126,47 +133,58 @@ class _PaymentPageState extends State<PaymentPage> {
                 builder: (BuildContext context, value, child) {
                   return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: cart.getCounter(),
-                    itemBuilder: (context, index) => Table(
-                      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                      // defaultColumnWidth: FlexColumnWidth(),
-                      // columnWidths: const <int, TableColumnWidth>{
-                      //   0: FlexColumnWidth(),
-                      //   1: FixedColumnWidth(40),
-                      //   2: FlexColumnWidth(),
-                      // },
-                      children: [
-                        TableRow(
-                          children:  [
-                            Text(
-                              "${value.cart[index].bookTitle}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w300      
-                              ),
-                            ),
-                            Text(
-                              "${value.cart[index].quantity!.value}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w300      
-                              ),
-                            ),
-                            Text(
-                              // "Rp. ${priceFormat.format(value.cart[index].bookPrice)}",
-                              "Rp. ${priceFormat.format(value.cart[index].bookPrice! * value.cart[index].quantity!.value)}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w300      
-                              ),
-                            ),
+                    // itemCount: cart.getCounter(currentUserId),
+                    itemCount: cart.getTotalItem(),
+                    itemBuilder: (BuildContext context, index) {
+                      // print(value.cart[index].quantity);
+                      if(value.cart[index].userId == currentUserId){
+                        // print(value.cart[index].quantity!.value);
+                        // print(value.cart);
+                        return Table(
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                          // defaultColumnWidth: FlexColumnWidth(),
+                          // columnWidths: const <int, TableColumnWidth>{
+                          //   0: FlexColumnWidth(),
+                          //   1: FixedColumnWidth(40),
+                          //   2: FlexColumnWidth(),
+                          // },
+                          children: [
+                            TableRow(
+                              children:  [
+                                Text(
+                                  "${value.cart[index].bookTitle}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w300      
+                                  ),
+                                ),
+                                Text(
+                                  "${value.cart[index].quantity!.value}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w300      
+                                  ),
+                                ),
+                                Text(
+                                  // "Rp. ${priceFormat.format(value.cart[index].bookPrice)}",
+                                  "Rp. ${priceFormat.format(value.cart[index].bookPrice! * value.cart[index].quantity!.value)}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w300      
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    )
+                        );
+                      }else{
+                        return SizedBox.shrink();
+                        // return Container();
+                      }
+                    }
                   );
                 }
               ),
@@ -179,10 +197,12 @@ class _PaymentPageState extends State<PaymentPage> {
               builder: (BuildContext context, value, Widget? child) {
                 final ValueNotifier<int?> totalPrice = ValueNotifier(null);
                   for (var element in value.cart) {
-                    totalPrice.value =
-                        (element.bookPrice! * element.quantity!.value) +
-                            (totalPrice.value ?? 0);
-                    finalPrice = totalPrice.value ?? 0;
+                    if(element.userId == currentUserId){
+                      totalPrice.value =
+                          (element.bookPrice! * element.quantity!.value) +
+                              (totalPrice.value ?? 0);
+                      finalPrice = totalPrice.value ?? 0;
+                    }
                   }
       
                   return Column(
@@ -237,12 +257,16 @@ class _PaymentPageState extends State<PaymentPage> {
                         // cart.removeCounter();
                       // }
                       // Provider.of<CartProvider>(context).cart.clear();
-                      del.clearCart();
-                      Navigator.push(context, RouterGenerator.generateRoute(
-                        RouteSettings(
-                          name: '/home',
-                        )
-                      ));
+                      cart.clearCart(currentUserId);
+                      // Navigator.push(context, RouterGenerator.generateRoute(
+                      //   RouteSettings(
+                      //     name: '/home',
+                      //   )
+                      // ));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=>HomePage(currentUserId: currentUserId))
+                      );
                       showDialog(
                           context: context, 
                           builder: (_) => SuccessPaymentAlertDialog()

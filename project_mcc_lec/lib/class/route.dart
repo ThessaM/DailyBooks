@@ -12,10 +12,10 @@ class RouterGenerator {
         return MaterialPageRoute(builder: (_) => LoginPage());
       case '/register':
         return MaterialPageRoute(builder: (_) => Register());
-      case '/home':
-        return MaterialPageRoute(builder: (_) => HomePage());
-      case '/payment':
-        return MaterialPageRoute(builder: (_) => PaymentPage());
+      // case '/home':
+      //   return MaterialPageRoute(builder: (_) => HomePage());
+      // case '/payment':
+      //   return MaterialPageRoute(builder: (_) => PaymentPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

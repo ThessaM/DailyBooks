@@ -1,4 +1,5 @@
 import 'package:project_mcc_lec/class/cart_model.dart';
+import 'package:project_mcc_lec/class/history.dart';
 import 'package:project_mcc_lec/class/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,15 +27,17 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE cart(id INTEGER PRIMARY KEY, bookTitle VARCHAR UNIQUE, bookPrice INTEGER, quantity INTEGER, bookPath TEXT)'
+        'CREATE TABLE cart(id INTEGER, userId INTEGER, bookTitle VARCHAR, bookPrice INTEGER, quantity INTEGER, bookPath TEXT, PRIMARY KEY(id, userId))'
       );
     await db.execute(
-        'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR UNIQUE, email TEXT, password TEXT, profileImage TEXT)'
+        'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR, email TEXT, password TEXT, profileImage TEXT)'
       );
-    // await db.execute(
-    //     'CREATE TABLE history(id INTEGER PRIMARY KEY, userId INTEGER, totalPrice INTEGER, date DATE)'
-    //   );
+    await db.execute(
+        'CREATE TABLE history(id INTEGER PRIMARY KEY, userId INTEGER, purchaseDate DATE, bookTitle TEXT, bookPrice INTEGER, qty INTEGER)'
+      );
   }
+
+  //cart
 
   Future<Cart> insertCart(Cart cart) async {
     var dbClient = await database;
@@ -49,15 +52,17 @@ class DBHelper {
     return queryResult.map((result) => Cart.fromMap(result)).toList();
   }
 
-  Future<int> deleteCartItem(int id) async {
+  Future<int> deleteCartItem(int id, int userId) async {
     var dbClient = await database;
-    return await dbClient!.delete('cart', where: 'id = ?', whereArgs: [id]);
+    return await dbClient!.delete('cart', where: 'id = ? AND userId = ?', whereArgs: [id, userId]);
+    // return await dbClient!.rawDelete(sql)
   }
 
   Future<int> updateQuantity(Cart cart) async {
     var dbClient = await database;
-    return await dbClient!.update('cart', cart.quantityMap(),
-        where: "id = ?", whereArgs: [cart.id]);
+    // return await dbClient!.update('cart', cart.quantityMap(),
+    //     where: "id = ? AND userId = ?", whereArgs: [cart.id, cart.userId]);
+    return await dbClient!.update('cart', cart.quantityMap(), where: "id = ? AND userId = ?", whereArgs: [cart.id, cart.userId]);
   }
 
   Future<List<Cart>> getCartId(int id) async {
@@ -71,6 +76,18 @@ class DBHelper {
     final db = await database;
     return db!.rawQuery("DELETE FROM cart");
   }
+
+  deleteAfterPayment(int userId) async{
+    final db = await database;
+    return await db!.delete('cart', where: 'userId = ?', whereArgs: [userId]);
+  }
+
+  // deleteAfterPayment2(int userId) async{
+  //   final db = await database;
+  //   return await db!.rawQuery("DELETE FROM cart WHERE userId = userId");
+  // }
+
+  //user
 
   Future<List<User>> getUser() async{
     final db = await database;
@@ -102,6 +119,36 @@ class DBHelper {
     // int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT * FROM user')) ?? 0;
     // int amount = (await db!.query("SELECT COUNT (*) FROM user")).length;
     int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM user')) ?? 0;
+    return amount; 
+  }
+
+  //history
+
+  Future<List<History>> getHistory() async{
+    final db = await database;
+    var histories = await db!.query('history', orderBy: 'id');
+    List<History> historyList = histories.isNotEmpty ?
+      histories.map((e) => History.fromMap(e)).toList()
+      : [];
+    return historyList;
+  }
+
+  Future<History> addHistory(History history) async{
+    var db = await database;
+    await db!.insert('history', history.toMap());
+    return history;
+  }
+
+  Future<int> deleteHistory(int id) async{
+    var db = await database;
+    return await db!.delete('history', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> getAmountHistory() async{
+    var db = await database;
+    // int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT * FROM user')) ?? 0;
+    // int amount = (await db!.query("SELECT COUNT (*) FROM user")).length;
+    int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM history')) ?? 0;
     return amount; 
   }
 

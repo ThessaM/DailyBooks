@@ -20,7 +20,9 @@ import 'package:provider/provider.dart';
 */
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.currentUserId}) : super(key: key);
+
+  final int? currentUserId;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -29,6 +31,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   String? searchedBook;
+  get currentUserId => widget.currentUserId;
 
   final List <Book> books = [
     Book(0, "Crooked House", "Agatha Christie", 60000, "Young Sophia returns after the war to find her grandfather poisoned and a family filled with suspects. Luckily her fiancé, Charles, is the son of the assistant commissioner of Scotland Yard.", "assets/Book/CrookedHouse_AgathaChristie.jpg", 4.5),
@@ -54,7 +57,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: (){
               showSearch(
                 context: context, 
-                delegate: BookSearchDelegate(books)
+                delegate: BookSearchDelegate(books, currentUserId)
               );
             }, 
             icon: Icon(Icons.search_rounded)
@@ -67,7 +70,7 @@ class _HomePageState extends State<HomePage> {
       body: Column(
           children: [
             SizedBox(height: 25,),
-            Expanded(child: BookListGridView(bookLists: books))
+            Expanded(child: BookListGridView(bookLists: books, currentUserId: currentUserId,))
           ],
         ),
       // body: BookListGridView(bookLists: books),
@@ -144,7 +147,7 @@ class _HomePageState extends State<HomePage> {
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage())),
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(currentUserId: widget.currentUserId,))),
               // Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(books: books, bookIndex: 0,))),
               //ganti route ke cart page
             child: Icon(Icons.shopping_cart_outlined),
@@ -157,11 +160,13 @@ class _HomePageState extends State<HomePage> {
 
 class BookSearchDelegate extends SearchDelegate{
   
-  BookSearchDelegate(this.books){
+  BookSearchDelegate(this.books, this.currentUserId){
     books = this.books;
+    currentUserId = this.currentUserId;
   }
 
-  List<Book> books; 
+  List<Book> books;
+  int currentUserId; 
 
   List<String> searchResults = [
       "Crooked House",
@@ -204,7 +209,7 @@ class BookSearchDelegate extends SearchDelegate{
     return Column(
       children: [
         SizedBox(height: 35,),
-        Expanded(child: BookListGridView(bookLists: bookFound))
+        Expanded(child: BookListGridView(bookLists: bookFound, currentUserId: currentUserId,))
       ],
     );
 
@@ -238,9 +243,10 @@ class BookSearchDelegate extends SearchDelegate{
 
 
 class BookListGridView extends StatelessWidget {
-  BookListGridView({super.key, required this.bookLists});
+  BookListGridView({super.key, required this.bookLists, required this.currentUserId});
 
   final List <Book> bookLists;
+  final int currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +258,10 @@ class BookListGridView extends StatelessWidget {
           ),
       itemCount: bookLists.length,
       itemBuilder: (context, index) {
-        return BookListCard(bookdetail: bookLists[index]);
+        return BookListCard(
+          bookdetail: bookLists[index],
+          currentUserId: currentUserId,
+        );
       });
     
   }
@@ -261,10 +270,12 @@ class BookListGridView extends StatelessWidget {
 
 class BookListCard extends StatelessWidget {
   const BookListCard({super.key, 
-    required this.bookdetail
+    required this.bookdetail,
+    required this.currentUserId
   });
 
   final Book bookdetail;
+  final int currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +283,12 @@ class BookListCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => {
         //ubah ke detail book page
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetailPage(selectedBook: bookdetail)))
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => BookDetailPage(
+            selectedBook: bookdetail,
+            currentUserId: currentUserId,
+          )
+        ))
       },
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,

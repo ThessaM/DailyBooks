@@ -92,6 +92,7 @@ class Register extends StatelessWidget {
       
               ElevatedButton( // register button
                 onPressed: () async {
+                  // List<User> users = await dbHelper.getUser();
                   // detail validasinya di paling bawah
                   if(validasi(usernameController, emailController, passwordController,
                   confirmPasswordController, context)){
@@ -101,7 +102,7 @@ class Register extends StatelessWidget {
 
                     await dbHelper.addUser(
                       User(
-                        id: await dbHelper.getAmountUser()+1, 
+                        id: await dbHelper.getAmountUser(), 
                         username: usernameController.text, 
                         email: emailController.text, 
                         password: passwordController.text,
