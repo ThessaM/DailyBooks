@@ -61,8 +61,8 @@ class DBHelper {
     return queryIdResult.map((e) => Cart.fromMap(e)).toList();
   }
 
-  static Future deleteAll() async{
-    final db = await DBHelper().database;
+  deleteAll() async{
+    final db = await database;
     return db!.rawQuery("DELETE FROM cart");
   }
 }

@@ -81,8 +81,9 @@ class CartProvider with ChangeNotifier {
   }
 
   void clearCart(){
-    DBHelper.deleteAll();
+    dbHelper.deleteAll();
     cart.clear();
+    _counter = 0;
     _setPrefsItems();
     notifyListeners();
   }
