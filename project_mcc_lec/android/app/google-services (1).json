@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "617705997434",
+    "project_id": "mcclec",
+    "storage_bucket": "mcclec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617705997434:android:a709221590c212addbe7c3",
+        "android_client_info": {
+          "package_name": "com.example.project_mcc_lec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "617705997434-3fqvvf53keftdddbneoaqu2mm23rtvnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCabWwjT5uwhipLYKxx_drueVJjwfwhAmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "617705997434-3fqvvf53keftdddbneoaqu2mm23rtvnf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

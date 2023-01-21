@@ -12,6 +12,7 @@ import 'package:project_mcc_lec/page/loginpage.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /*
 [] navigasi drawer -> profile page, history
@@ -20,6 +21,9 @@ import 'package:provider/provider.dart';
 */
 
 class HomePage extends StatefulWidget {
+  // final FirebaseUser user;
+  // HomePage(this.user);
+
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -27,13 +31,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   String? searchedBook;
 
-  final List <Book> books = [
-    Book(0, "Crooked House", "Agatha Christie", 60000, "Young Sophia returns after the war to find her grandfather poisoned and a family filled with suspects. Luckily her fiancé, Charles, is the son of the assistant commissioner of Scotland Yard.", "assets/Book/CrookedHouse_AgathaChristie.jpg", 4.5),
-    Book(1, "The Case Book of Sherlock Holmes", "Sir Arthur Conan Doyle", 86000, "the final set of twelve Sherlock Holmes short stories", "assets/Book/TheCaseBookOfSherlockHolmes_SirArthur.jpg", 5),
-    Book(2, "Sophie's World", "Jostein Gaarder", 72000, "Sophie Amundsen, a Norwegian teenager, who is introduced to the history of philosophy as she is asked, 'Who Are You?'", "assets/Book/DuniaSophie_JosteinGaarder.jpg", 4.5)
+  final List<Book> books = [
+    Book(
+        0,
+        "Crooked House",
+        "Agatha Christie",
+        60000,
+        "Young Sophia returns after the war to find her grandfather poisoned and a family filled with suspects. Luckily her fiancé, Charles, is the son of the assistant commissioner of Scotland Yard.",
+        "assets/Book/CrookedHouse_AgathaChristie.jpg",
+        4.5),
+    Book(
+        1,
+        "The Case Book of Sherlock Holmes",
+        "Sir Arthur Conan Doyle",
+        86000,
+        "the final set of twelve Sherlock Holmes short stories",
+        "assets/Book/TheCaseBookOfSherlockHolmes_SirArthur.jpg",
+        5),
+    Book(
+        2,
+        "Sophie's World",
+        "Jostein Gaarder",
+        72000,
+        "Sophie Amundsen, a Norwegian teenager, who is introduced to the history of philosophy as she is asked, 'Who Are You?'",
+        "assets/Book/DuniaSophie_JosteinGaarder.jpg",
+        4.5)
   ];
 
   @override
@@ -51,68 +75,81 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Home'),
         actions: [
           IconButton(
-            onPressed: (){
-              showSearch(
-                context: context, 
-                delegate: BookSearchDelegate(books)
-              );
-            }, 
-            icon: Icon(Icons.search_rounded)
+              onPressed: () {
+                showSearch(
+                    context: context, delegate: BookSearchDelegate(books));
+              },
+              icon: Icon(Icons.search_rounded)),
+          SizedBox(
+            width: 10,
           ),
-          SizedBox(width: 10,),
           // LogoutButtonAlert()
         ],
         titleSpacing: 0,
       ),
       body: Column(
-          children: [
-            SizedBox(height: 25,),
-            Expanded(child: BookListGridView(bookLists: books))
-          ],
-        ),
+        children: [
+          SizedBox(
+            height: 25,
+          ),
+          Expanded(child: BookListGridView(bookLists: books))
+        ],
+      ),
       // body: BookListGridView(bookLists: books),
       drawer: Drawer(
         width: 270,
         child: ListView(
           children: [
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             DrawerHeader(
-              margin: EdgeInsets.all(0),
-              padding: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  ClipOval(
-                    child: Container(
-                      width: 75,
-                      //bisa diatur lagi sesuai database
-                      child: Image(image: AssetImage('assets/Logo/profile_default.jpg'))
+                margin: EdgeInsets.all(0),
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  children: [
+                    ClipOval(
+                      child: Container(
+                          width: 75,
+                          //bisa diatur lagi sesuai database
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/Logo/profile_default.jpg'))),
                     ),
-                  ),
-                  SizedBox(width: 10,),
-                  //ubah sesuai nama user ${username}
-                  Flexible(
-                    child: Text("username",
-                      style: TextStyle(
-                        fontSize: 23
+                    SizedBox(
+                      width: 10,
+                    ),
+                    //ubah sesuai nama user ${username}
+                    Flexible(
+                      child: Text(
+                        "username",
+                        style: TextStyle(fontSize: 23),
+                        softWrap: true,
                       ),
-                      softWrap: true,
-                    ),
-                  )
-                ],
-              )
+                    )
+                  ],
+                )),
+            Container(
+              height: 1,
+              color: Colors.grey.shade300,
             ),
-            Container(height: 1, color: Colors.grey.shade300,),
-            SizedBox(height: 20,),
-            HomePageDrawerListTile(
-              tileName: "Profile", 
-              tileIcon: Icon(Icons.account_circle_rounded, size: 36,), 
-              tileRoute: '/'
+            SizedBox(
+              height: 20,
             ),
             HomePageDrawerListTile(
-              tileName: "History", 
-              tileIcon: Icon(Icons.article_rounded, size: 36,), 
-              tileRoute: '/'
-            ),
+                tileName: "Profile",
+                tileIcon: Icon(
+                  Icons.account_circle_rounded,
+                  size: 36,
+                ),
+                tileRoute: '/'),
+            HomePageDrawerListTile(
+                tileName: "History",
+                tileIcon: Icon(
+                  Icons.article_rounded,
+                  size: 36,
+                ),
+                tileRoute: '/'),
             SizedBox(
               height: 60,
               child: ListTile(
@@ -122,15 +159,17 @@ class _HomePageState extends State<HomePage> {
                 iconColor: Colors.deepOrange,
                 title: Text(
                   "Logout",
-                  style: TextStyle(
-                    fontSize: 18
-                  ),
+                  style: TextStyle(fontSize: 18),
                 ),
-                leading: Icon(Icons.logout, size: 36,),
+                leading: Icon(
+                  Icons.logout,
+                  size: 36,
+                ),
                 horizontalTitleGap: 15,
                 //atur navigasi ke profile page
-                onTap: () =>
-                  {showDialog(context: context, builder: (_) => LogoutAlert())},
+                onTap: () => {
+                  showDialog(context: context, builder: (_) => LogoutAlert())
+                },
               ),
             ),
           ],
@@ -143,10 +182,10 @@ class _HomePageState extends State<HomePage> {
         width: 70,
         child: FittedBox(
           child: FloatingActionButton(
-            onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage())),
-              // Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(books: books, bookIndex: 0,))),
-              //ganti route ke cart page
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => CartPage())),
+            // Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(books: books, bookIndex: 0,))),
+            //ganti route ke cart page
             child: Icon(Icons.shopping_cart_outlined),
           ),
         ),
@@ -155,47 +194,46 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class BookSearchDelegate extends SearchDelegate{
-  
-  BookSearchDelegate(this.books){
+class BookSearchDelegate extends SearchDelegate {
+  BookSearchDelegate(this.books) {
     books = this.books;
   }
 
-  List<Book> books; 
+  List<Book> books;
 
   List<String> searchResults = [
-      "Crooked House",
-      "Sophie's World",
-    ];
+    "Crooked House",
+    "Sophie's World",
+  ];
 
   @override
   // TODO: implement searchFieldLabel
   String? get searchFieldLabel => "Search Book Title...";
 
   @override
-  Widget? buildLeading(BuildContext context) => IconButton( 
-    icon: Icon(Icons.arrow_back_rounded),
-    onPressed: () => close(context, null),
-  );
+  Widget? buildLeading(BuildContext context) => IconButton(
+        icon: Icon(Icons.arrow_back_rounded),
+        onPressed: () => close(context, null),
+      );
 
   @override
   List<Widget>? buildActions(BuildContext context) => [
-    IconButton(
-      // padding: EdgeInsets.only(right: 15),
-      icon: Icon(Icons.clear_rounded),
-      onPressed: (){
-        if(query.isEmpty){
-          close(context, null);
-        }else{
-          query = '';
-        }
-      }, 
-    )
-  ];
+        IconButton(
+          // padding: EdgeInsets.only(right: 15),
+          icon: Icon(Icons.clear_rounded),
+          onPressed: () {
+            if (query.isEmpty) {
+              close(context, null);
+            } else {
+              query = '';
+            }
+          },
+        )
+      ];
 
   @override
   Widget buildResults(BuildContext context) {
-    List <Book> bookFound = books.where((books) {
+    List<Book> bookFound = books.where((books) {
       final book = books.bookTitle.toLowerCase();
       final input = query.toLowerCase();
       return book.contains(input);
@@ -203,13 +241,13 @@ class BookSearchDelegate extends SearchDelegate{
 
     return Column(
       children: [
-        SizedBox(height: 35,),
+        SizedBox(
+          height: 35,
+        ),
         Expanded(child: BookListGridView(bookLists: bookFound))
       ],
     );
-
   }
-
 
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -220,59 +258,58 @@ class BookSearchDelegate extends SearchDelegate{
     }).toList();
 
     return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
+        itemCount: suggestions.length,
+        itemBuilder: (context, index) {
+          final suggestion = suggestions[index];
 
-        return ListTile(
-          title: Text(suggestion),
-          onTap: (){
-            query = suggestion;
-            showResults(context);
-          },
-        );
-      }
-    );
+          return ListTile(
+            title: Text(suggestion),
+            onTap: () {
+              query = suggestion;
+              showResults(context);
+            },
+          );
+        });
   }
 }
-
 
 class BookListGridView extends StatelessWidget {
   BookListGridView({super.key, required this.bookLists});
 
-  final List <Book> bookLists;
+  final List<Book> bookLists;
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      controller: ScrollController(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        controller: ScrollController(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.6,
-          ),
-      itemCount: bookLists.length,
-      itemBuilder: (context, index) {
-        return BookListCard(bookdetail: bookLists[index]);
-      });
-    
+        ),
+        itemCount: bookLists.length,
+        itemBuilder: (context, index) {
+          return BookListCard(bookdetail: bookLists[index]);
+        });
   }
 }
 
-
 class BookListCard extends StatelessWidget {
-  const BookListCard({super.key, 
-    required this.bookdetail
-  });
+  const BookListCard({super.key, required this.bookdetail});
 
   final Book bookdetail;
 
   @override
   Widget build(BuildContext context) {
-    var priceFormat = NumberFormat.simpleCurrency(name: '',);
+    var priceFormat = NumberFormat.simpleCurrency(
+      name: '',
+    );
     return GestureDetector(
       onTap: () => {
         //ubah ke detail book page
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetailPage(selectedBook: bookdetail)))
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BookDetailPage(selectedBook: bookdetail)))
       },
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -281,7 +318,8 @@ class BookListCard extends StatelessWidget {
           Card(
             margin: EdgeInsets.fromLTRB(15, 2, 15, 0),
             elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
@@ -289,21 +327,27 @@ class BookListCard extends StatelessWidget {
                 height: 245,
                 padding: EdgeInsets.zero,
                 alignment: Alignment.center,
-                child: Image(image: AssetImage(bookdetail.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
-              ),      
+                child: Image(
+                  image: AssetImage(bookdetail.bookPath),
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
             ),
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Text(
             '${bookdetail.bookTitle}',
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w700      
-            ),
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Text(
             'Rp.${priceFormat.format(bookdetail.bookPrice)}',
             style: TextStyle(
@@ -320,7 +364,11 @@ class BookListCard extends StatelessWidget {
 }
 
 class HomePageDrawerListTile extends StatelessWidget {
-  const HomePageDrawerListTile({super.key, required this.tileName, required this.tileIcon, required this.tileRoute});
+  const HomePageDrawerListTile(
+      {super.key,
+      required this.tileName,
+      required this.tileIcon,
+      required this.tileRoute});
 
   final String tileName;
   final Icon tileIcon;
@@ -333,21 +381,17 @@ class HomePageDrawerListTile extends StatelessWidget {
       child: ListTile(
         title: Text(
           tileName,
-          style: TextStyle(
-            fontSize: 18
-          ),
+          style: TextStyle(fontSize: 18),
         ),
         leading: tileIcon,
         horizontalTitleGap: 15,
         //atur navigasi ke history page
-        onTap: () => Navigator.push(
-          context, RouterGenerator.generateRoute(RouteSettings(name: '${tileRoute}'))
-        ),
+        onTap: () => Navigator.push(context,
+            RouterGenerator.generateRoute(RouteSettings(name: '${tileRoute}'))),
       ),
     );
   }
 }
-
 
 class LogoutAlert extends StatelessWidget {
   const LogoutAlert({Key? key}) : super(key: key);
@@ -359,8 +403,8 @@ class LogoutAlert extends StatelessWidget {
         'Logout of your account?',
         textAlign: TextAlign.center,
       ),
-      titleTextStyle: const TextStyle(
-          fontSize: 25, fontWeight: FontWeight.bold),
+      titleTextStyle:
+          const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
       titlePadding: EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 25),
       buttonPadding: EdgeInsets.zero,
       actions: [
@@ -386,7 +430,8 @@ class LogoutAlert extends StatelessWidget {
         ),
         CupertinoDialogAction(
           child: Text('Cancel'),
-          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          textStyle:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           // textStyle: TextStyle(fontWeight: FontWeight.w600),
           onPressed: () {
             Navigator.pop(context);

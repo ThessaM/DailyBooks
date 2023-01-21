@@ -33,3 +33,13 @@ git push
 git pull
 ```
 > _Use this command to update your project before push to repo_
+
+
+**5. Git Branch**
+```
+git branch
+git branch [Nama Branch]
+git checkout [Nama Branch]
+git merge [Nama Branch]
+git branch -d [Nama Branch]
+```
