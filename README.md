@@ -10,13 +10,13 @@
 
 **1. Git Clone**
 ```
-git clone https://github.com/FebricoJonata/FinalProjectMCC.git
+git clone https://github.com/ThessaM/ProjectMCC_LEC.git
 ```
 _use this command to download/clone this project_
 
 **2. Git Remote**
 ```
-git remote add origin https://github.com/FebricoJonata/FinalProjectMCC.git
+git remote add origin https://github.com/ThessaM/ProjectMCC_LEC.git
 git branch -M main
 git push -u origin main
 ```
