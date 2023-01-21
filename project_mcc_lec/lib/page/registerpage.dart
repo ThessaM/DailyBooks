@@ -1,21 +1,26 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/class/user.dart';
+import 'package:project_mcc_lec/page/loginpage.dart';
+import 'package:sqflite/sqflite.dart';
 
 /*
-[] database + API
+[v] database + API sqflite
 */
 
 class Register extends StatelessWidget {
   Register({super.key});
 
+  DBHelper dbHelper = DBHelper();
+
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  late User user;
+  // late User user;
 
   @override
   Widget build(BuildContext context) {
@@ -86,15 +91,23 @@ class Register extends StatelessWidget {
               ),
       
               ElevatedButton( // register button
-                onPressed: () {
+                onPressed: () async {
                   // detail validasinya di paling bawah
                   if(validasi(usernameController, emailController, passwordController,
                   confirmPasswordController, context)){
-                    user = User(usernameController.text, emailController.text, passwordController.text);
+                    // user = User(usernameController.text, emailController.text, passwordController.text);
                     //buat cek kalo kesimpen di variabelnya
                     // print(user.username + " " + user.email + " " + user.password);
 
-                    // variabelnya daftarin ke database pake api & sql :)  
+                    await dbHelper.addUser(
+                      User(
+                        id: await dbHelper.getAmountUser()+1, 
+                        username: usernameController.text, 
+                        email: emailController.text, 
+                        password: passwordController.text,
+                        profileImage: 'assets/Logo/profile_default.jpg' 
+                      )
+                    );
 
                     Navigator.push(context, RouterGenerator.generateRoute(
                       RouteSettings(
@@ -170,25 +183,37 @@ bool validasi(TextEditingController usernameController, TextEditingController em
 
   if(usernameController.text.isEmpty||emailController.text.isEmpty||
   passwordController.text.isEmpty||confirmPasswordController.text.isEmpty){
-    const snackBar = SnackBar(content: Text("All fields must be filled!"));
+    const snackBar = SnackBar(
+      content: DefaultSnackBar(title: "All fields must be filled!"),
+      duration: Duration(seconds: 1),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     return false;
   }
     
   else if(usernameController.text.length<4){
-    const snackBar = SnackBar(content: Text("Username must be at least 4 characters long"));
+    const snackBar = SnackBar(
+      content: DefaultSnackBar(title: "Username must be at least 4 characters long"),
+      duration: Duration(seconds: 1),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     return false;
   }
   
   else if(!regex.hasMatch(passwordController.text)){
-    const snackBar = SnackBar(content: Text("Password must contains at least 1 upper, lower, and number character"));
+    const snackBar = SnackBar(
+      content: DefaultSnackBar(title: "Password must contains at least 1 upper, lower, and number character"),
+      duration: Duration(seconds: 1),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     return false;
   }
                   
   else if(confirmPasswordController.text!=passwordController.text){
-    const snackBar = SnackBar(content: Text("The field Confirm Password is not the same as Password"));
+    const snackBar = SnackBar(
+      content: DefaultSnackBar(title: "The field Confirm Password is not the same as Password"),
+      duration: Duration(seconds: 1),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     return false;
   }

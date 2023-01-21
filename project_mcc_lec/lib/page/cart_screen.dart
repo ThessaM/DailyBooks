@@ -19,7 +19,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
 
   DBHelper? dbHelper = DBHelper();
-  List<bool> tapped = [];
+  // List<bool> tapped = [];
   var priceFormat = NumberFormat.simpleCurrency(name: '',);
   
   @override

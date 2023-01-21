@@ -286,7 +286,8 @@ class BookListCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 width: double.infinity,
-                height: 245,
+                // height: 245,
+                height: MediaQuery.of(context).size.height/3.5,
                 padding: EdgeInsets.zero,
                 alignment: Alignment.center,
                 child: Image(image: AssetImage(bookdetail.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),

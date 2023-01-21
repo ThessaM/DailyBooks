@@ -36,7 +36,7 @@ class BookDetailPage extends StatelessWidget {
 
     void saveData(int index) {
       dbHelper
-          .insert(
+          .insertCart(
         Cart(
           id: index,
           bookTitle: selectedBook.bookTitle, 
