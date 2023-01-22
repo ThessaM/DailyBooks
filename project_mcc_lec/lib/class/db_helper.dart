@@ -32,9 +32,12 @@ class DBHelper {
     await db.execute(
         'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR, email TEXT, password TEXT, profileImage TEXT)'
       );
-    await db.execute(
-        'CREATE TABLE history(id INTEGER PRIMARY KEY, userId INTEGER, purchaseDate DATE, bookTitle TEXT, bookPrice INTEGER, qty INTEGER)'
-      );
+    // await db.execute(
+    //     'CREATE TABLE history(id INTEGER , bookTitle TEXT, bookPrice INTEGER, bookPath TEXT, qty INTEGER)'
+    //   );
+    // await db.execute(
+    //     'CREATE TABLE transaction(id INTEGER , userId INTEGER, purchaseDate DATE, totalPrice INTEGER, totalItem INTEGER)'
+    //   );
   }
 
   //cart

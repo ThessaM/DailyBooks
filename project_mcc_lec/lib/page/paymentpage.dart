@@ -64,12 +64,6 @@ class _PaymentPageState extends State<PaymentPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Payment'),
-        actions: [
-          
-          const SizedBox(
-            width: 20.0,
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

@@ -7,6 +7,7 @@ import 'package:project_mcc_lec/page/cart_screen.dart';
 import 'package:project_mcc_lec/page/cartpage.dart';
 import 'package:project_mcc_lec/class/book.dart';
 import 'package:project_mcc_lec/page/bookdetailpage.dart';
+import 'package:project_mcc_lec/page/historypage.dart';
 import 'package:project_mcc_lec/page/loginpage.dart';
 // import 'package:flutter/src/foundation/key.dart';
 // import 'package:flutter/src/widgets/framework.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 
 /*
 [] navigasi drawer -> profile page, history
+[v] navigasi drawer -> history
 [v] navigasi booklistcard -> ke page detail book
 [v] navigasi floating action button -> ke cart pages
 */
@@ -109,12 +111,13 @@ class _HomePageState extends State<HomePage> {
             HomePageDrawerListTile(
               tileName: "Profile", 
               tileIcon: Icon(Icons.account_circle_rounded, size: 36,), 
-              tileRoute: '/'
+              //ubah sesuai page profile
+              tileRoute: HomePage(currentUserId: currentUserId)
             ),
             HomePageDrawerListTile(
               tileName: "History", 
               tileIcon: Icon(Icons.article_rounded, size: 36,), 
-              tileRoute: '/'
+              tileRoute: HistoryPage(currentUserId: currentUserId)
             ),
             SizedBox(
               height: 60,
@@ -341,7 +344,7 @@ class HomePageDrawerListTile extends StatelessWidget {
 
   final String tileName;
   final Icon tileIcon;
-  final String tileRoute;
+  final Widget tileRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +361,9 @@ class HomePageDrawerListTile extends StatelessWidget {
         horizontalTitleGap: 15,
         //atur navigasi ke history page
         onTap: () => Navigator.push(
-          context, RouterGenerator.generateRoute(RouteSettings(name: '${tileRoute}'))
+          context, 
+          // RouterGenerator.generateRoute(RouteSettings(name: '${tileRoute}'))
+          MaterialPageRoute(builder: (context) => tileRoute)
         ),
       ),
     );

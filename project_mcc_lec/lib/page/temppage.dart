@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:project_mcc_lec/class/cart_model.dart';
+import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/user.dart';
 import 'package:provider/provider.dart';
@@ -22,15 +24,7 @@ class _TempPageState extends State<TempPage> {
   
 
   @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   context.read<DBHelper>().getUser();
-  // }
-
-  @override
   Widget build(BuildContext context) {
-    // final users = Provider.of<DBHelper>(context);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -54,18 +48,6 @@ class _TempPageState extends State<TempPage> {
           }
         )
       ),
-      // body: Center(
-      //   child: Column(
-      //     children: [
-      //       Consumer<DBHelper>(builder: (BuildContext context, value, child) => 
-
-      //       ))
-      //       // Text(users[0].id.toString()),
-      //       // Text(users[0].username),
-      //       // Text(users[0].email)
-      //     ]
-      //   ),
-      // ),
     );
   }
 }
