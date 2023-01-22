@@ -1,26 +1,36 @@
 
 
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/class/user.dart';
 import 'package:project_mcc_lec/page/loginpage.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
 /*
+[v] update ui obscure input password;
 [v] database + API sqflite
 */
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   Register({super.key});
 
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
   DBHelper dbHelper = DBHelper();
 
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  // late User user;
+  final phoneNumberController = TextEditingController();
+
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +59,7 @@ class Register extends StatelessWidget {
                 height: 70,
               ),
               TextFormField(
-                maxLength: 25,
+                // maxLength: 25,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                     hintText: "Input your Username",
@@ -58,7 +68,7 @@ class Register extends StatelessWidget {
               ),
               SeparatorSizedBoxRegisterPage(),
               TextFormField(
-                maxLength: 50,
+                // maxLength: 50,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -68,21 +78,47 @@ class Register extends StatelessWidget {
               ),
               SeparatorSizedBoxRegisterPage(),
               TextFormField(
-                maxLength: 50,
-                obscureText: true,
+                // maxLength: 50,
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                    hintText: "Input your password",
-                    labelText: "Password"),
-                controller: passwordController,
+                    hintText: "Input your phone number",
+                    labelText: "Phone Number"),
+                controller: phoneNumberController,
               ),
               SeparatorSizedBoxRegisterPage(),
               TextFormField(
-                obscureText: true,
+                // maxLength: 50,
+                obscureText: _isObscure,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                    hintText: "Input your password again",
-                    labelText: "Password Confirmation"),
+                  suffixIcon: IconButton(
+                    icon: Icon(!_isObscure ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  ), 
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                  hintText: "Input your password",
+                  labelText: "Password"),
+                  controller: passwordController,
+              ),
+              SeparatorSizedBoxRegisterPage(),
+              TextFormField(
+                obscureText: _isObscure,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(!_isObscure ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  ), 
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                hintText: "Input your password again",
+                labelText: "Password Confirmation"),
                 controller: confirmPasswordController,
               ),
               
@@ -92,10 +128,8 @@ class Register extends StatelessWidget {
       
               ElevatedButton( // register button
                 onPressed: () async {
-                  // List<User> users = await dbHelper.getUser();
-                  // detail validasinya di paling bawah
                   if(validasi(usernameController, emailController, passwordController,
-                  confirmPasswordController, context)){
+                  confirmPasswordController, phoneNumberController, context)){
                     // user = User(usernameController.text, emailController.text, passwordController.text);
                     //buat cek kalo kesimpen di variabelnya
                     // print(user.username + " " + user.email + " " + user.password);
@@ -105,8 +139,9 @@ class Register extends StatelessWidget {
                         id: await dbHelper.getAmountUser(), 
                         username: usernameController.text, 
                         email: emailController.text, 
+                        phoneNumber: phoneNumberController.text,
                         password: passwordController.text,
-                        profileImage: 'assets/Logo/profile_default.jpg' 
+                        profileImage: '0' 
                       )
                     );
 
@@ -176,14 +211,15 @@ class SeparatorSizedBoxRegisterPage extends StatelessWidget {
 }
 
 
+
 // buat validasinya
-bool validasi(TextEditingController usernameController, TextEditingController emailController, TextEditingController passwordController, TextEditingController confirmPasswordController, context){
+bool validasi(TextEditingController usernameController, TextEditingController emailController, TextEditingController passwordController, TextEditingController confirmPasswordController, TextEditingController phoneNumberController, context){
 
   String pattern = r'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])';
   RegExp regex = RegExp(pattern);
 
   if(usernameController.text.isEmpty||emailController.text.isEmpty||
-  passwordController.text.isEmpty||confirmPasswordController.text.isEmpty){
+  passwordController.text.isEmpty||confirmPasswordController.text.isEmpty || phoneNumberController.text.isEmpty){
     const snackBar = SnackBar(
       content: DefaultSnackBar(title: "All fields must be filled!"),
       duration: Duration(seconds: 1),

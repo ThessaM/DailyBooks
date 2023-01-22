@@ -39,7 +39,8 @@ class BookDetailPage extends StatelessWidget {
       dbHelper
           .insertCart(
         Cart(
-          id: index,
+          id: cart.getUniqueCartId(),
+          bookId : index,
           userId: currentUserId,
           bookTitle: selectedBook.bookTitle, 
           bookPrice: selectedBook.bookPrice,

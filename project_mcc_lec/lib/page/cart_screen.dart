@@ -7,7 +7,9 @@ import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/route.dart';
+import 'package:project_mcc_lec/page/homepage.dart';
 import 'package:project_mcc_lec/page/paymentpage.dart';
+import 'package:project_mcc_lec/page/temppage.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
@@ -26,17 +28,30 @@ class _CartPageState extends State<CartPage> {
   var priceFormat = NumberFormat.simpleCurrency(name: '',);
   get currentUserId => widget.currentUserId;
   // List<Cart> foundCart = [];
+
+  // List<Cart> newCart = [];
+  // Future<List<Cart>> getNewCartData() async{
+  //   List<Cart> newCartList = await dbHelper!.getCartList();
+  //   if(newCartList.isEmpty) return [];
+  //   return newCartList;
+  // }
   
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<CartProvider>().getData();
+    // context.read<CartProvider>().getData();
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // context.read<CartProvider>().getData();
+      context.read<CartProvider>().getData();
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
+
+    // final newCart = getNewCartData();
 
     // void addItemToList(int ind, Cart item){
     //   setState(() {
@@ -48,6 +63,10 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('My Shopping Cart'),
+        // leading: IconButton(
+        //   onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(currentUserId: currentUserId)), (route) => false), 
+        //   icon: Icon(Icons.arrow_back_rounded)
+        // ),
         actions: [
           Badge(
             badgeColor: Colors.black54,
@@ -177,33 +196,38 @@ class _CartPageState extends State<CartPage> {
                                         builder: (context, val, child) {
                                           return PlusMinusButtons(
                                             addQuantity: () {
-                                              cart.addQuantity(provider.cart[index].id!, currentUserId);
+                                              cart.addQuantity(provider.cart[index].bookId!, currentUserId);
                                               dbHelper!.updateQuantity(
-                                                Cart(
-                                                  id: index,
-                                                  userId: currentUserId,
-                                                  bookTitle: provider.cart[index].bookTitle,
-                                                  bookPrice: provider.cart[index].bookPrice,
-                                                  quantity: ValueNotifier(
-                                                    provider.cart[index].quantity!.value
+                                                  Cart(
+                                                    id: index,
+                                                    bookId: provider.cart[index].bookId,
+                                                    userId: currentUserId,
+                                                    bookTitle: provider.cart[index].bookTitle,
+                                                    bookPrice: provider.cart[index].bookPrice,
+                                                    quantity: ValueNotifier(
+                                                      provider.cart[index].quantity!.value
+                                                    ),
+                                                    // quantity: ,
+                                                    bookPath: provider.cart[index].bookPath
+                                                    // book: provider.cart[index].book
                                                   ),
-                                                  bookPath: provider.cart[index].bookPath
-                                                  // book: provider.cart[index].book
                                                 )
-                                              ).then((value) {
-                                                setState(() {
-                                                  cart.addTotalPrice(double.parse(
-                                                    provider.cart[index].bookPrice.toString()
-                                                  ));
-                                                });
-                                              });
+                                                .then((value) {
+                                                  setState(() {
+                                                    cart.addTotalPrice(double.parse(
+                                                      provider.cart[index].bookPrice.toString()
+                                                    ));
+                                                  });
+                                                }
+                                              );
                                             },
                                             deleteQuantity: (){
-                                              cart.deleteQuantity(provider.cart[index].id!, currentUserId);
+                                              cart.deleteQuantity(provider.cart[index].bookId!, currentUserId);
                                               dbHelper!.updateQuantity(
                                                 Cart(
                                                   id: index,
                                                   userId: currentUserId,
+                                                  bookId: provider.cart[index].bookId,
                                                   bookTitle: provider.cart[index].bookTitle,
                                                   bookPrice: provider.cart[index].bookPrice,
                                                   quantity: ValueNotifier(
@@ -211,7 +235,7 @@ class _CartPageState extends State<CartPage> {
                                                   ),
                                                   bookPath: provider.cart[index].bookPath
                                                   // book: provider.cart[index].book
-                                                )
+                                                ),
                                               ).then((value) {
                                                 setState(() {
                                                   cart.removeTotalPrice(double.parse(
@@ -224,7 +248,9 @@ class _CartPageState extends State<CartPage> {
                                               // ));
                                             },
                                             // text: val.toString(),
-                                            text: val.toString(),
+                                            text: provider.cart[index].quantity!.value.toString(),
+                                            // text: newCart[index].quantity.toString(),
+
                                           );
                                       }
                                       ),
@@ -234,8 +260,8 @@ class _CartPageState extends State<CartPage> {
                                         ClipOval(child: Container(height: 36, width: 36, color: Colors.red.withOpacity(0.75),)),
                                         IconButton(
                                           onPressed: () {
-                                            dbHelper!.deleteCartItem(provider.cart[index].id!, currentUserId);
-                                            provider.removeItem(provider.cart[index].id!, currentUserId);
+                                            dbHelper!.deleteCartItem(provider.cart[index].bookId!, currentUserId);
+                                            provider.removeItem(provider.cart[index].bookId!, currentUserId);
                                             provider.removeCounter();
                                             ScaffoldMessenger.of(context).showSnackBar(
                                               const SnackBar(
@@ -325,11 +351,15 @@ class _CartPageState extends State<CartPage> {
             //     )
             //   )
             // );
-            print(cart.quantity);
+            // print(cart.quantity);
             Navigator.push(
               context, 
               MaterialPageRoute(builder: (context) => PaymentPage(currentUserId: currentUserId))
             );
+            // Navigator.push(
+            //   context, 
+            //   MaterialPageRoute(builder: (context) => TempPage())
+            // );
           }
         },
         child: Container(

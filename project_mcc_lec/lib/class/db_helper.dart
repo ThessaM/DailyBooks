@@ -27,10 +27,16 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE cart(id INTEGER, userId INTEGER, bookTitle VARCHAR, bookPrice INTEGER, quantity INTEGER, bookPath TEXT, PRIMARY KEY(id, userId))'
+      'DROP TABLE IF EXISTS cart'
+    );
+    await db.execute(
+      'DROP TABLE IF EXISTS user'
+    );
+    await db.execute(
+        'CREATE TABLE cart(id INTEGER, bookId INTEGER, userId INTEGER, bookTitle VARCHAR, bookPrice INTEGER, quantity INTEGER, bookPath TEXT, PRIMARY KEY(bookId, UserId))'
       );
     await db.execute(
-        'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR, email TEXT, password TEXT, profileImage TEXT)'
+        'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR, email TEXT, phoneNumber TEXT, password TEXT, profileImage TEXT)'
       );
     // await db.execute(
     //     'CREATE TABLE history(id INTEGER , bookTitle TEXT, bookPrice INTEGER, bookPath TEXT, qty INTEGER)'
@@ -55,17 +61,36 @@ class DBHelper {
     return queryResult.map((result) => Cart.fromMap(result)).toList();
   }
 
-  Future<int> deleteCartItem(int id, int userId) async {
+  Future<int> deleteCartItem(int bookId, int userId) async {
     var dbClient = await database;
-    return await dbClient!.delete('cart', where: 'id = ? AND userId = ?', whereArgs: [id, userId]);
+    return await dbClient!.delete('cart', where: 'bookId = ? AND userId = ?', whereArgs: [bookId, userId]);
     // return await dbClient!.rawDelete(sql)
   }
 
+  // Future<int> updateQuantity(Cart cart) async {
+  //   var dbClient = await database;
+  //   // return await dbClient!.update('cart', cart.quantityMap(),
+  //   //     where: "id = ? AND userId = ?", whereArgs: [cart.id, cart.userId]);
+  //   int res = await dbClient!.update('cart', cart.quantityMap(), where: "id = ? AND userId = ?", whereArgs: [cart.id, cart.userId]);
+  //   print(res);
+  //   return res;
+  //   // print(cart.quantity!.value);
+  //   // return await dbClient!.rawUpdate('UPDATE cart SET quantity = ${cart.quantity!.value}  WHERE id = ${cart.id} AND userId = ${cart.userId}');
+  // }
+
   Future<int> updateQuantity(Cart cart) async {
-    var dbClient = await database;
-    // return await dbClient!.update('cart', cart.quantityMap(),
-    //     where: "id = ? AND userId = ?", whereArgs: [cart.id, cart.userId]);
-    return await dbClient!.update('cart', cart.quantityMap(), where: "id = ? AND userId = ?", whereArgs: [cart.id, cart.userId]);
+    final dbClient = await database;
+    final res = await dbClient!.update('cart', cart.quantityMap(), where: "bookId = ? AND userId = ?", whereArgs: [cart.bookId, cart.userId]);
+    // final res = await dbClient!.rawQuery('UPDATE cart SET quantity = ${cart.quantity!.value}  WHERE id = ${cart.id} AND userId = ${cart.userId}');
+    // final List<Map<String, Object?>> queryResult = await dbClient.query('cart');
+    // print(queryResult);
+    // print(cart.id);
+    // print(cart.quantity!.value);
+    // print(cart.userId);
+    // print(res);
+    // final res2 = await dbClient!.delete('cart', where: 'id = ? AND userId = ?', whereArgs: [cart.id, cart.userId]);
+    // await dbClient.insert('cart', cart.toMap());
+    return res;
   }
 
   Future<List<Cart>> getCartId(int id) async {

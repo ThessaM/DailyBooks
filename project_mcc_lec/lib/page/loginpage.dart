@@ -22,6 +22,10 @@ class LoginPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+  // Future retrieveUser() async{
+  //   List<User> userList = await dbHelper.getUser();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

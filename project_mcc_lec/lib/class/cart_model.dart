@@ -3,6 +3,7 @@ import 'package:project_mcc_lec/class/book.dart';
 
 class Cart {
   late final int? id;
+  final int? bookId;
   final int? userId;
   final String? bookTitle; 
   final int? bookPrice; 
@@ -15,6 +16,7 @@ class Cart {
 
   Cart(
       {required this.id,
+      required this.bookId,
       required this.userId,
       required this.bookTitle,
       required this.bookPrice,
@@ -25,6 +27,7 @@ class Cart {
 
   Cart.fromMap(Map<dynamic, dynamic> data)
       : id = data['id'],
+        bookId = data['bookId'],
         userId = data['userId'],
         bookTitle = data['bookTitle'],
         bookPrice = data['bookPrice'],
@@ -35,6 +38,7 @@ class Cart {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'bookId': bookId,
       'userId':userId,
       'bookTitle': bookTitle,
       'bookPrice': bookPrice,
@@ -49,9 +53,16 @@ class Cart {
 
   Map<String, dynamic> quantityMap() {
     return {
+      // 'id': id,
+      // 'userId': userId,
+      // 'quantity': quantity!.value,
       'id': id,
+      'bookId': bookId,
       'userId': userId,
+      'bookTitle': bookTitle,
+      'bookPrice': bookPrice,
       'quantity': quantity!.value,
+      'bookPath': bookPath
     };
   }
 }

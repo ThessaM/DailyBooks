@@ -122,7 +122,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 8,),
               Consumer<CartProvider>(
                 builder: (BuildContext context, value, child) {
                   return ListView.builder(
@@ -134,45 +134,48 @@ class _PaymentPageState extends State<PaymentPage> {
                       if(value.cart[index].userId == currentUserId){
                         // print(value.cart[index].quantity!.value);
                         // print(value.cart);
-                        return Table(
-                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                          // defaultColumnWidth: FlexColumnWidth(),
-                          // columnWidths: const <int, TableColumnWidth>{
-                          //   0: FlexColumnWidth(),
-                          //   1: FixedColumnWidth(40),
-                          //   2: FlexColumnWidth(),
-                          // },
-                          children: [
-                            TableRow(
-                              children:  [
-                                Text(
-                                  "${value.cart[index].bookTitle}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w300      
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Table(
+                            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                            // defaultColumnWidth: FlexColumnWidth(),
+                            // columnWidths: const <int, TableColumnWidth>{
+                            //   0: FlexColumnWidth(),
+                            //   1: FixedColumnWidth(40),
+                            //   2: FlexColumnWidth(),
+                            // },
+                            children: [
+                              TableRow(
+                                children:  [
+                                  Text(
+                                    "${value.cart[index].bookTitle}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300      
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "${value.cart[index].quantity!.value}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w300      
+                                  Text(
+                                    "${value.cart[index].quantity!.value}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300      
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  // "Rp. ${priceFormat.format(value.cart[index].bookPrice)}",
-                                  "Rp. ${priceFormat.format(value.cart[index].bookPrice! * value.cart[index].quantity!.value)}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w300      
+                                  Text(
+                                    // "Rp. ${priceFormat.format(value.cart[index].bookPrice)}",
+                                    "Rp. ${priceFormat.format(value.cart[index].bookPrice! * value.cart[index].quantity!.value)}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300      
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
+                                ],
+                              )
+                            ],
+                          ),
                         );
                       }else{
                         return SizedBox.shrink();
@@ -257,6 +260,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       //     name: '/home',
                       //   )
                       // ));
+                      // Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context)=>HomePage(currentUserId: currentUserId))

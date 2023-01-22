@@ -3,6 +3,7 @@ class User{
   late final int? id;
   final String username;
   final String email;
+  final String phoneNumber;
   final String password;
   final String? profileImage;
 
@@ -10,6 +11,7 @@ class User{
     this.id,
     required this.username,
     required this.email,
+    required this.phoneNumber,
     required this.password,
     this.profileImage
   });
@@ -24,7 +26,8 @@ class User{
   factory User.fromMap(Map<dynamic, dynamic> data) => new User(
     id: data['id'], 
     username: data['username'], 
-    email: data['email'], 
+    email: data['email'],
+    phoneNumber: data['phoneNumber'], 
     password: data['password'], 
     profileImage: data['profileImage']
   );
@@ -35,6 +38,7 @@ class User{
       'id': id,
       'username' : username,
       'email' : email,
+      'phoneNumber' : phoneNumber,
       'password' : password,
       'profileImage' : profileImage
     };

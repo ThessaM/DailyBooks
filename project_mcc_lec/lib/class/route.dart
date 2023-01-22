@@ -10,8 +10,8 @@ class RouterGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        // return MaterialPageRoute(builder: (_) => LoginPage());
-        return MaterialPageRoute(builder: (_) => HomePage(currentUserId: 1));
+        return MaterialPageRoute(builder: (_) => LoginPage());
+        // return MaterialPageRoute(builder: (_) => HomePage(currentUserId: 1,));
       case '/register':
         return MaterialPageRoute(builder: (_) => Register());
       // case '/home':

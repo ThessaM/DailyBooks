@@ -28,9 +28,9 @@ class _TempPageState extends State<TempPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: FutureBuilder<List<User>>(
-          future: dbHelper.getUser(),
-          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot){
+        child: FutureBuilder<List<Cart>>(
+          future: dbHelper.getCartList(),
+          builder: (BuildContext context, AsyncSnapshot<List<Cart>> snapshot){
             if(!snapshot.hasData){
               return Center(child: Text("Loading..."),);
             }
@@ -40,7 +40,8 @@ class _TempPageState extends State<TempPage> {
               children: snapshot.data!.map((e) {
                 return Center(
                   child: ListTile(
-                    title: Text(e.username),
+                    title: Text(e.bookTitle!),
+                    subtitle: Text(e.quantity!.value.toString()),
                   ),
                 );
               }).toList(),

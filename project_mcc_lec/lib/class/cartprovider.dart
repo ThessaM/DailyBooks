@@ -62,13 +62,19 @@ class CartProvider with ChangeNotifier {
     // return 0;
   }
 
+  int getUniqueCartId(){
+    if(cart.isEmpty) return 0;
+    int newId = cart[cart.length-1].id! + 1;
+    return newId;
+  }
+
   int getTotalItem() {
     return cart.length;
     // return 0;
   }
 
-  void addQuantity(int id, int userId) {
-    final index = cart.indexWhere((element) => element.id == id && element.userId == userId);
+  void addQuantity(int bookId, int userId) {
+    final index = cart.indexWhere((element) => element.bookId == bookId && element.userId == userId);
     // print(index);
     // print(cart[index].quantity!.value);
     cart[index].quantity!.value = cart[index].quantity!.value + 1;
@@ -77,8 +83,8 @@ class CartProvider with ChangeNotifier {
     // print(cart[index].quantity!.value);
   }
 
-  void deleteQuantity(int id, int userId) {
-    final index = cart.indexWhere((element) => element.id == id && element.userId == userId);
+  void deleteQuantity(int bookId, int userId) {
+    final index = cart.indexWhere((element) => element.bookId == bookId && element.userId == userId);
     final currentQuantity = cart[index].quantity!.value;
     if (currentQuantity <= 1) {
       currentQuantity == 1;
@@ -89,8 +95,8 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeItem(int id, int userId) {
-    final index = cart.indexWhere((element) => element.id == id && element.userId == userId);
+  void removeItem(int bookId, int userId) {
+    final index = cart.indexWhere((element) => element.bookId == bookId && element.userId == userId);
     cart.removeAt(index);
     _setPrefsItems();
     notifyListeners();

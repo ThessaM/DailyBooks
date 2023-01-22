@@ -12,10 +12,12 @@ import 'package:project_mcc_lec/page/loginpage.dart';
 // import 'package:flutter/src/foundation/key.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/route.dart';
+import 'package:project_mcc_lec/page/profilepage.dart';
 import 'package:provider/provider.dart';
 
 /*
-[] navigasi drawer -> profile page, history
+[] ambil database -> username di drawer + profile image
+[v] navigasi drawer -> profile page
 [v] navigasi drawer -> history
 [v] navigasi booklistcard -> ke page detail book
 [v] navigasi floating action button -> ke cart pages
@@ -41,16 +43,16 @@ class _HomePageState extends State<HomePage> {
     Book(2, "Sophie's World", "Jostein Gaarder", 72000, "Sophie Amundsen, a Norwegian teenager, who is introduced to the history of philosophy as she is asked, 'Who Are You?'", "assets/Book/DuniaSophie_JosteinGaarder.jpg", 4.5)
   ];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    context.read<CartProvider>().getData();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   context.read<CartProvider>().getData();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartProvider>(context);
+    // final cart = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -112,7 +114,7 @@ class _HomePageState extends State<HomePage> {
               tileName: "Profile", 
               tileIcon: Icon(Icons.account_circle_rounded, size: 36,), 
               //ubah sesuai page profile
-              tileRoute: HomePage(currentUserId: currentUserId)
+              tileRoute: ProfilePage(currentUserId: currentUserId)
             ),
             HomePageDrawerListTile(
               tileName: "History", 
@@ -150,7 +152,12 @@ class _HomePageState extends State<HomePage> {
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(currentUserId: widget.currentUserId,))),
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(currentUserId: currentUserId,))),
+              // Navigator.pushAndRemoveUntil(
+              //   context, 
+              //   MaterialPageRoute(builder: (context) => CartPage(currentUserId: currentUserId)),
+              //   (route) => false
+              // ),
               // Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(books: books, bookIndex: 0,))),
               //ganti route ke cart page
             child: Icon(Icons.shopping_cart_outlined),
