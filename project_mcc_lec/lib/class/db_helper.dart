@@ -1,5 +1,6 @@
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/history.dart';
+import 'package:project_mcc_lec/class/transaction.dart';
 import 'package:project_mcc_lec/class/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,17 +34,24 @@ class DBHelper {
       'DROP TABLE IF EXISTS user'
     );
     await db.execute(
+      'DROP TABLE IF EXISTS transactionHeader'
+    );
+    await db.execute(
+      'DROP TABLE IF EXISTS history'
+    );
+    await db.execute(
         'CREATE TABLE cart(id INTEGER, bookId INTEGER, userId INTEGER, bookTitle VARCHAR, bookPrice INTEGER, quantity INTEGER, bookPath TEXT, PRIMARY KEY(bookId, UserId))'
       );
     await db.execute(
         'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR, email TEXT, phoneNumber TEXT, password TEXT, profileImage TEXT)'
       );
-    // await db.execute(
-    //     'CREATE TABLE history(id INTEGER , bookTitle TEXT, bookPrice INTEGER, bookPath TEXT, qty INTEGER)'
-    //   );
-    // await db.execute(
-    //     'CREATE TABLE transaction(id INTEGER , userId INTEGER, purchaseDate DATE, totalPrice INTEGER, totalItem INTEGER)'
-    //   );
+    await db.execute(
+      'CREATE TABLE transactionHeader(id INTEGER PRIMARY KEY , userId INTEGER, purchaseDate TEXT, totalPrice INTEGER, totalItem INTEGER)'
+    );
+    await db.execute(
+        'CREATE TABLE history(id INTEGER , bookTitle TEXT, bookPrice INTEGER, bookPath TEXT, qty INTEGER)'
+      );
+    
   }
 
   //cart
@@ -110,6 +118,14 @@ class DBHelper {
     return await db!.delete('cart', where: 'userId = ?', whereArgs: [userId]);
   }
 
+  // Future<int> getAmountCart() async{
+  //   var db = await database;
+  //   // int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT * FROM user')) ?? 0;
+  //   // int amount = (await db!.query("SELECT COUNT (*) FROM user")).length;
+  //   int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM cart')) ?? 0;
+  //   return amount; 
+  // }
+
   // deleteAfterPayment2(int userId) async{
   //   final db = await database;
   //   return await db!.rawQuery("DELETE FROM cart WHERE userId = userId");
@@ -147,6 +163,28 @@ class DBHelper {
     // int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT * FROM user')) ?? 0;
     // int amount = (await db!.query("SELECT COUNT (*) FROM user")).length;
     int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM user')) ?? 0;
+    return amount; 
+  }
+
+  //transaction
+  Future<List<TransactionHeader>> getTransactionHeader() async{
+    final db = await database;
+    var trans = await db!.query('transactionHeader', orderBy: 'id');
+    List<TransactionHeader> transList = trans.isNotEmpty ?
+      trans.map((e) => TransactionHeader.fromMap(e)).toList()
+      : [];
+    return transList;
+  }
+
+  Future<TransactionHeader> addTransactionHeader(TransactionHeader transactionHeader) async{
+    var db = await database;
+    await db!.insert('transactionHeader', transactionHeader.toMap());
+    return transactionHeader;
+  }
+
+  Future<int> getAmountTransactionHeader() async{
+    var db = await database;
+    int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM transactionHeader')) ?? 0;
     return amount; 
   }
 

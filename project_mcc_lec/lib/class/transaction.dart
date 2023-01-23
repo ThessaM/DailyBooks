@@ -1,11 +1,11 @@
-class Transaction{
+class TransactionHeader{
   late final int? id;
   final int userId;
-  final purchaseDate; //date
+  final String purchaseDate; //date
   final int totalPrice;
   final int totalItem;
 
-  Transaction({
+  TransactionHeader({
     this.id,
     required this.userId,
     required this.purchaseDate,
@@ -13,7 +13,7 @@ class Transaction{
     required this.totalItem
   });
 
-  factory Transaction.fromMap(Map<dynamic, dynamic> data) => new Transaction(
+  factory TransactionHeader.fromMap(Map<String, dynamic> data) => new TransactionHeader(
     id: data['id'], 
     userId: data['userId'],
     purchaseDate: data['purchaseDate'],

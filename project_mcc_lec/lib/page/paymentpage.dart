@@ -10,7 +10,9 @@ import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
+import 'package:project_mcc_lec/class/history.dart';
 import 'package:project_mcc_lec/class/route.dart';
+import 'package:project_mcc_lec/class/transaction.dart';
 import 'package:project_mcc_lec/page/cart_screen.dart';
 import 'package:project_mcc_lec/page/homepage.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +62,45 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
     // final del = Provider.of<CartProvider>(context, listen: false);
+
+    void saveTransactionHistory() async {
+      int currentTransactionId = await dbHelper.getAmountTransactionHeader();
+      List<Cart> cartList = await dbHelper.getCartList();
+      int currentUserTotalItem = 0;
+      // var currentaDate = DateTime.now();
+
+      print('cart amount ${cartList.length}');
+
+      for(int i = 0; i<cartList.length; i++){
+        print('looping ${cartList.length}');
+        if(cartList[i].userId == currentUserId){
+          dbHelper.addHistory(
+            History(
+              id: currentTransactionId,
+              bookTitle: cartList[i].bookTitle!, 
+              bookPrice: cartList[i].bookPrice!, 
+              bookPath: cartList[i].bookPath!, 
+              qty: cartList[i].quantity!.value
+            )
+          );
+          currentUserTotalItem++;
+        }
+      }
+
+      dbHelper.addTransactionHeader(
+        TransactionHeader(
+          id: currentTransactionId,
+          userId: currentUserId, 
+          purchaseDate: DateFormat("dd-MM-yyy").format(DateTime.now()), 
+          totalPrice: finalPrice, 
+          totalItem: currentUserTotalItem
+        )
+      );
+
+      cart.clearCart(currentUserId);
+    }
+
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -246,21 +287,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     //validasi address
                     if(validasi(addressController, context)){
                       //tambah update database
-                      // cart.removeAllItem();
-                      // for(int i = cart.getCounter()-1; i>=0; i--){
-                        // dbHelper.deleteCartItem(i);
-                        
-                        // cart.removeAllItem();
-                        // cart.removeCounter();
-                      // }
-                      // Provider.of<CartProvider>(context).cart.clear();
-                      cart.clearCart(currentUserId);
-                      // Navigator.push(context, RouterGenerator.generateRoute(
-                      //   RouteSettings(
-                      //     name: '/home',
-                      //   )
-                      // ));
-                      // Navigator.pop(context);
+                      saveTransactionHistory();
+                      // cart.clearCart(currentUserId);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context)=>HomePage(currentUserId: currentUserId))

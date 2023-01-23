@@ -13,6 +13,7 @@ import 'package:project_mcc_lec/page/loginpage.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/page/profilepage.dart';
+import 'package:project_mcc_lec/page/temppage.dart';
 import 'package:provider/provider.dart';
 
 /*
@@ -120,6 +121,7 @@ class _HomePageState extends State<HomePage> {
               tileName: "History", 
               tileIcon: Icon(Icons.article_rounded, size: 36,), 
               tileRoute: HistoryPage(currentUserId: currentUserId)
+              // tileRoute: TempPage(),
             ),
             SizedBox(
               height: 60,
