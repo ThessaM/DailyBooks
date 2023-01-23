@@ -1,9 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.project_mcc_lec">
    <application
-        android:label="project_mcc_lec"
-        android:name="${applicationName}"
+        android:label="BookStory"
+        android:name="${applicationName}"      
         android:icon="@mipmap/ic_launcher">
+        <!-- android:label="project_mcc_lec" -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
