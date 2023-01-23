@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/history.dart';
 import 'package:project_mcc_lec/class/transaction.dart';
+import 'package:project_mcc_lec/page/homepage.dart';
 import 'package:project_mcc_lec/page/paymentpage.dart';
 
 
@@ -45,6 +46,14 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Your History'),
+        leading: IconButton(
+          onPressed: () => Navigator.pushAndRemoveUntil(
+            context, 
+            MaterialPageRoute(builder: (context) => HomePage(currentUserId: currentUserId)), 
+            (route) => false
+          ) , 
+          icon: Icon(Icons.arrow_back_rounded)
+        ),
       ),
       body: FutureBuilder<List<TransactionHeader>>(
         future: dbHelper.getTransactionHeader(),

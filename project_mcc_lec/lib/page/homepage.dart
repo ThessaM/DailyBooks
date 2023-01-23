@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +15,8 @@ import 'package:project_mcc_lec/page/profilepage.dart';
 
 
 /*
-[] ambil database -> username di drawer + profile image
-[v] ambil database -> drawer -> profile image
+[] ambil database -> -> drawer -> profile image
+[v] ambil database -> drawer -> username
 [v] navigasi drawer -> profile page
 [v] navigasi drawer -> history
 [v] navigasi booklistcard -> ke page detail book
@@ -102,13 +104,29 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(left: 16, right: 16),
                     child: Row(
                       children: [
-                        ClipOval(
-                          child: Container(
+                        // ClipOval(
+                          // child: 
+                          Container(
                             width: 75,
                             //bisa diatur lagi sesuai database
-                            child: Image(image: AssetImage('assets/Logo/profile_default.jpg'))
+                            decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(20),
+                              shape: BoxShape.circle,
+                              color: Colors.grey,
+                              // image: pickedGalleryImage == null
+                              image: snapshot.data!.profileImage == '0'
+                                  ? DecorationImage(
+                                      image: AssetImage('assets/Logo/profile_default.jpg'))
+                                  : DecorationImage(
+                                      // image: FileImage(pickedGalleryImage!),
+                                      image: FileImage(File(snapshot.data!.profileImage!)),
+                                      fit: BoxFit.cover)
+                              ),
+                            // child: snapshot.data!.profileImage == '0'?
+                            // Image(image: AssetImage('assets/Logo/profile_default.jpg'))
+                            // : Image.file(File(snapshot.data!.profileImage!))
                           ),
-                        ),
+                        // ),
                         SizedBox(width: 10,),
                         //ubah sesuai nama user ${username}
                         Flexible(
@@ -389,11 +407,15 @@ class HomePageDrawerListTile extends StatelessWidget {
         leading: tileIcon,
         horizontalTitleGap: 15,
         //atur navigasi ke history page
-        onTap: () => Navigator.push(
+        // onTap: () => Navigator.push(
+        //   context, 
+        //   // RouterGenerator.generateRoute(RouteSettings(name: '${tileRoute}'))
+        //   MaterialPageRoute(builder: (context) => tileRoute)
+        // ),
+        onTap: () => Navigator.pushAndRemoveUntil(
           context, 
-          // RouterGenerator.generateRoute(RouteSettings(name: '${tileRoute}'))
-          MaterialPageRoute(builder: (context) => tileRoute)
-        ),
+          MaterialPageRoute(builder: (context) => tileRoute), 
+          (route) => false),
       ),
     );
   }

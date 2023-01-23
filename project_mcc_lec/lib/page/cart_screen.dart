@@ -1,15 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:flutter/src/foundation/key.dart';
-// import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
-import 'package:project_mcc_lec/class/route.dart';
-import 'package:project_mcc_lec/page/homepage.dart';
 import 'package:project_mcc_lec/page/paymentpage.dart';
-import 'package:project_mcc_lec/page/temppage.dart';
+// import 'package:project_mcc_lec/page/tempFolder/temppage.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
