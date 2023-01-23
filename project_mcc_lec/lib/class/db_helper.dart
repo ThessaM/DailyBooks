@@ -142,6 +142,15 @@ class DBHelper {
     return userList;
   }
 
+  Future<User> getCurrentUserById(int userId) async{
+    final db = await database;
+    var users = await db!.query('user', orderBy: 'id');
+    List<User> userList = users.isNotEmpty ?
+      users.map((e) => User.fromMap(e)).toList()
+      : [];
+    return userList[userId];
+  }
+
   Future<User> addUser(User user) async{
     var db = await database;
     await db!.insert('user', user.toMap());
@@ -185,6 +194,12 @@ class DBHelper {
   Future<int> getAmountTransactionHeader() async{
     var db = await database;
     int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM transactionHeader')) ?? 0;
+    return amount; 
+  }
+
+  Future<int> getAmountTransactionHeaderById(int userId) async{
+    var db = await database;
+    int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM transactionHeader WHERE userId = ${userId}')) ?? 0;
     return amount; 
   }
 

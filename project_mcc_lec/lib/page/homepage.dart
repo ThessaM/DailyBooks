@@ -1,23 +1,20 @@
-// import 'package:easy_search_bar/easy_search_bar.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project_mcc_lec/class/cartprovider.dart';
+import 'package:project_mcc_lec/class/db_helper.dart';
+import 'package:project_mcc_lec/class/user.dart';
 import 'package:project_mcc_lec/page/cart_screen.dart';
-import 'package:project_mcc_lec/page/cartpage.dart';
 import 'package:project_mcc_lec/class/book.dart';
 import 'package:project_mcc_lec/page/bookdetailpage.dart';
 import 'package:project_mcc_lec/page/historypage.dart';
-import 'package:project_mcc_lec/page/loginpage.dart';
-// import 'package:flutter/src/foundation/key.dart';
-// import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/page/profilepage.dart';
-import 'package:project_mcc_lec/page/temppage.dart';
-import 'package:provider/provider.dart';
+
 
 /*
 [] ambil database -> username di drawer + profile image
+[v] ambil database -> drawer -> profile image
 [v] navigasi drawer -> profile page
 [v] navigasi drawer -> history
 [v] navigasi booklistcard -> ke page detail book
@@ -35,8 +32,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  DBHelper dbHelper = DBHelper();
   String? searchedBook;
   get currentUserId => widget.currentUserId;
+  // User? currentUserData;
 
   final List <Book> books = [
     Book(0, "Crooked House", "Agatha Christie", 60000, "Young Sophia returns after the war to find her grandfather poisoned and a family filled with suspects. Luckily her fiancé, Charles, is the son of the assistant commissioner of Scotland Yard.", "assets/Book/CrookedHouse_AgathaChristie.jpg", 4.5),
@@ -48,12 +47,21 @@ class _HomePageState extends State<HomePage> {
   // void initState() {
   //   // TODO: implement initState
   //   super.initState();
-  //   context.read<CartProvider>().getData();
+  //   // context.read<CartProvider>().getData();
   // }
 
   @override
   Widget build(BuildContext context) {
-    // final cart = Provider.of<CartProvider>(context);
+    // Future<User> fetchCurrentUserData = dbHelper.getCurrentUserById(currentUserId);
+
+    // fetchCurrentUserData.then((data) {
+    //   setState(() {
+    //     currentUserData = data;
+    //   });
+    // }, onError: (e) {
+    //     print(e);
+    // });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -81,33 +89,45 @@ class _HomePageState extends State<HomePage> {
       // body: BookListGridView(bookLists: books),
       drawer: Drawer(
         width: 270,
-        child: ListView(
+        child: 
+        ListView(
           children: [
             SizedBox(height: 30,),
-            DrawerHeader(
-              margin: EdgeInsets.all(0),
-              padding: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  ClipOval(
-                    child: Container(
-                      width: 75,
-                      //bisa diatur lagi sesuai database
-                      child: Image(image: AssetImage('assets/Logo/profile_default.jpg'))
-                    ),
-                  ),
-                  SizedBox(width: 10,),
-                  //ubah sesuai nama user ${username}
-                  Flexible(
-                    child: Text("username",
-                      style: TextStyle(
-                        fontSize: 23
-                      ),
-                      softWrap: true,
-                    ),
-                  )
-                ],
-              )
+            FutureBuilder<User>(
+              future: dbHelper.getCurrentUserById(currentUserId),
+              builder: (BuildContext context, AsyncSnapshot<User> snapshot){
+                if(snapshot.hasData){
+                  return DrawerHeader(
+                    margin: EdgeInsets.all(0),
+                    padding: EdgeInsets.only(left: 16, right: 16),
+                    child: Row(
+                      children: [
+                        ClipOval(
+                          child: Container(
+                            width: 75,
+                            //bisa diatur lagi sesuai database
+                            child: Image(image: AssetImage('assets/Logo/profile_default.jpg'))
+                          ),
+                        ),
+                        SizedBox(width: 10,),
+                        //ubah sesuai nama user ${username}
+                        Flexible(
+                          child: Text(
+                            // "username",
+                            snapshot.data!.username,
+                            // currentUserData!.username,
+                            style: TextStyle(
+                              fontSize: 23
+                            ),
+                            softWrap: true,
+                          ),
+                        )
+                      ],
+                    )
+                  );
+                }
+                return Text("");
+              }
             ),
             Container(height: 1, color: Colors.grey.shade300,),
             SizedBox(height: 20,),

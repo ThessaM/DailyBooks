@@ -26,26 +26,21 @@ class _HistoryPageState extends State<HistoryPage> {
 
   DBHelper dbHelper = DBHelper();
   var priceFormat = NumberFormat.simpleCurrency(name: '',);
+  int currentUserTransactionCount = 0;
 
   get currentUserId => widget.currentUserId;
 
-  // List<TransactionHeader> transactionList = [
-  //   TransactionHeader(id: 0, userId: 1, purchaseDate: '22-2-2019', totalPrice: 240000, totalItem: 3),
-  //   TransactionHeader(id: 1, userId: 1, purchaseDate: '10-2-2019', totalPrice: 70000, totalItem: 1),
-  //   TransactionHeader(id: 2, userId: 0, purchaseDate: '18-2-2019', totalPrice: 120000, totalItem: 2),
-  // ];
-
-  // List<History> historyList = [
-  //   History(id: 0, bookTitle: "Crooked House", bookPrice: 50000, bookPath: 'assets/Book/CrookedHouse_AgathaChristie.jpg', qty: 2),
-  //   History(id: 0, bookTitle: "Sophie's World", bookPrice: 70000, bookPath: 'assets/Book/DuniaSophie_JosteinGaarder.jpg', qty: 1),
-  //   History(id: 0, bookTitle: "The Case Book of Sherlock Holmes", bookPrice: 70000, bookPath: 'assets/Book/TheCaseBookOfSherlockHolmes_SirArthur.jpg', qty: 1),
-  //   History(id: 1, bookTitle: "Sophie's World", bookPrice: 70000,bookPath: 'assets/Book/DuniaSophie_JosteinGaarder.jpg', qty: 1),
-  //   History(id: 2, bookTitle: "Crooked House", bookPrice: 50000, bookPath: 'assets/Book/CrookedHouse_AgathaChristie.jpg', qty: 2),
-  //   History(id: 2, bookTitle: "Sophie's World", bookPrice: 70000, bookPath: 'assets/Book/DuniaSophie_JosteinGaarder.jpg', qty: 1),
-  // ];
-
   @override
   Widget build(BuildContext context) {
+
+    // Future<int> fetchCurrentUserTransactionCount = dbHelper.getAmountTransactionHeaderById(currentUserId);
+    // fetchCurrentUserTransactionCount() async {
+    //   int res = await dbHelper.getAmountTransactionHeaderById(currentUserId);
+    //   setState(() {
+    //     currentUserTransactionCount = res;
+    //   });
+    // };
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -56,7 +51,17 @@ class _HistoryPageState extends State<HistoryPage> {
         // shrinkWrap: true,
         builder: (BuildContext context, AsyncSnapshot<List<TransactionHeader>> snapshot){
           if(!snapshot.hasData){
-              // return Center(child: Text("Loading..."),);
+            return Center(
+              child: Text(
+                "No Transaction Found", 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 18.0
+                ),
+              )
+            );
+          }else{
+            if(snapshot.data!.any((element) => element.userId == currentUserId) == false){
               return Center(
                 child: Text(
                   "No Transaction Found", 
@@ -67,9 +72,6 @@ class _HistoryPageState extends State<HistoryPage> {
                 )
               );
             }
-            // return snapshot.data!.isEmpty ?
-            // Center(child: Text("No Transaction Found"),)
-            // : 
             return ListView(
               shrinkWrap: true,
               children: snapshot.data!.map((transactionList) {
@@ -119,19 +121,8 @@ class _HistoryPageState extends State<HistoryPage> {
                               future: dbHelper.getHistory(),
                               builder: (BuildContext context, AsyncSnapshot<List<History>> snapshot){
                                 if(!snapshot.hasData){
-                                  return Center(
-                                    child: Text(
-                                      "No History Found", 
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold, 
-                                        fontSize: 18.0
-                                      ),
-                                    )
-                                  );
+                                  return Text("");
                                 }
-                                // return snapshot.data!.isEmpty ?
-                                // Center(child: Text("No History Found"),)
-                                // : 
                                 return ListView(
                                   physics: NeverScrollableScrollPhysics(),
                                   children: snapshot.data!.map((historyList) {
@@ -213,6 +204,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 }
             }).toList(),
           );
+          }
         }
       ),
     );
