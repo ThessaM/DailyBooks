@@ -1,5 +1,6 @@
 // import 'dart:ffi';
 
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:project_mcc_lec/cart_screen.dart';
@@ -79,22 +80,43 @@ class BookDetailPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // SizedBox(height: 30,),
-                Card(
-                  margin: EdgeInsets.fromLTRB(40, 2, 40, 0),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      width: 240,
-                      height: 340,
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.center,
-                      child: Image(image: AssetImage(selectedBook.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
-                    ),      
+                FlipCard(
+                  // flipOnTouch: false,
+                  direction: FlipDirection.HORIZONTAL,
+                  side: CardSide.FRONT,
+                  front: Card(
+                    margin: EdgeInsets.fromLTRB(40, 2, 40, 0),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 240,
+                        height: 340,
+                        padding: EdgeInsets.zero,
+                        alignment: Alignment.center,
+                        child: Image(image: AssetImage(selectedBook.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
+                      ),      
+                    ),
+                  ), 
+                  back: Card(
+                    margin: EdgeInsets.fromLTRB(40, 2, 40, 0),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 240,
+                        height: 340,
+                        padding: EdgeInsets.zero,
+                        alignment: Alignment.center,
+                        child: Image(image: AssetImage(selectedBook.backPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
+                      ),      
+                    ),
                   ),
                 ),
-                BookDetailSeparator(),
+
+                BookDetailSeparator(value: 20,),
                 Text(
                   '${selectedBook.bookTitle}',
                   textAlign: TextAlign.center,

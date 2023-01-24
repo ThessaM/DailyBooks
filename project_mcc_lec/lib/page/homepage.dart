@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:project_mcc_lec/class/book.dart';
 import 'package:project_mcc_lec/page/bookdetailpage.dart';
 import 'package:project_mcc_lec/page/historypage.dart';
 import 'package:project_mcc_lec/class/route.dart';
+import 'package:project_mcc_lec/page/paymentpage.dart';
 import 'package:project_mcc_lec/page/profilepage.dart';
 
 
@@ -37,12 +39,50 @@ class _HomePageState extends State<HomePage> {
   DBHelper dbHelper = DBHelper();
   String? searchedBook;
   get currentUserId => widget.currentUserId;
+  int quoteIndex = Random().nextInt(7);
   // User? currentUserData;
 
   final List <Book> books = [
-    Book(0, "Crooked House", "Agatha Christie", 60000, "Young Sophia returns after the war to find her grandfather poisoned and a family filled with suspects. Luckily her fiancé, Charles, is the son of the assistant commissioner of Scotland Yard.", "assets/Book/CrookedHouse_AgathaChristie.jpg", 4.5),
-    Book(1, "The Case Book of Sherlock Holmes", "Sir Arthur Conan Doyle", 86000, "the final set of twelve Sherlock Holmes short stories", "assets/Book/TheCaseBookOfSherlockHolmes_SirArthur.jpg", 5),
-    Book(2, "Sophie's World", "Jostein Gaarder", 72000, "Sophie Amundsen, a Norwegian teenager, who is introduced to the history of philosophy as she is asked, 'Who Are You?'", "assets/Book/DuniaSophie_JosteinGaarder.jpg", 4.5)
+    Book(
+      0, 
+      "Crooked House", 
+      "Agatha Christie", 
+      60000, 
+      "Young Sophia returns after the war to find her grandfather poisoned and a family filled with suspects. Luckily her fiancé, Charles, is the son of the assistant commissioner of Scotland Yard.", 
+      "assets/Book/CrookedHouse_AgathaChristie.jpg",
+       "assets/Book/CrookedHouse_back.jpeg",
+      4.5
+    ),
+    Book(
+      1, 
+      "The Case Book of Sherlock Holmes", 
+      "Sir Arthur Conan Doyle", 
+      86000, 
+      "the final set of twelve Sherlock Holmes short stories", 
+      "assets/Book/TheCaseBookOfSherlockHolmes_SirArthur.jpg",
+      "assets/Book/TheCaseBookOfSherlockHolmes_back.jpg" ,
+      5
+    ),
+    Book(
+      2, 
+      "Sophie's World", 
+      "Jostein Gaarder", 
+      72000, 
+      "Sophie Amundsen, a Norwegian teenager, who is introduced to the history of philosophy as she is asked, 'Who Are You?'", 
+      "assets/Book/DuniaSophie_JosteinGaarder.jpg", 
+      "assets/Book/DuniaSophie_back.jpg",
+      4.5
+    )
+  ];
+
+  final List<String> quotes = [
+    "“Books are a uniquely portable magic.”\n―Stephen King",
+    "“I love the way that each book — any book — is its own journey. You open it, and off you go…”\n-Sharon Creech",
+    "“A great book should leave you with many experiences, and slightly exhausted at the end. You live several lives while reading.”\n-William Styron",
+    "“That’s the thing about books. They let you travel without moving your feet.”\n-Jhumpa Lahiri in The Namesake",
+    "“A reader lives a thousand lives before he dies.” \n-George R. R. Martin",
+    "“Come to a book as you would come to an unexplored land. Come without a map. Explore it, and draw your own map.”\n-Stephen King",
+    "“A truly good book is something as natural, and as unexpectedly and unaccountably fair and perfect, as a wild flower discovered on the prairies of the West or in the jungles of the East.”\n-Henry David Thoreau"
   ];
 
   // @override
@@ -82,12 +122,83 @@ class _HomePageState extends State<HomePage> {
         ],
         titleSpacing: 0,
       ),
-      body: Column(
-          children: [
-            SizedBox(height: 25,),
-            Expanded(child: BookListGridView(bookLists: books, currentUserId: currentUserId,))
-          ],
-        ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+            children:[
+              SizedBox(height: 25,),
+              Padding(
+                padding: const EdgeInsets.only(left: 25),
+                child: Text(
+                  "Hello, Welcome!!",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23
+                  ),
+                ),
+              ),
+              // SeparatorLine(),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(15),
+                child: Card(
+                  // color: Colors.deepOrange.shade400,
+                  // shadowColor: Colors.deepOrange.shade600,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  margin: EdgeInsets.fromLTRB(5, 10, 5, 15),
+                  child: ClipRRect(
+                    child: Container(
+                      // clipBehavior: Clip.antiAlias,
+                      width: double.infinity,
+                      // height: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            // Color.fromARGB(255, 241, 39, 17),
+                            // Color.fromARGB(255, 245, 175, 25)
+                             Color.fromARGB(255, 255, 81, 47),
+                            Color.fromARGB(255, 240, 152, 25)
+                          ]
+                        )
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Text(
+                          quotes[quoteIndex],
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 25),
+                child: Text(
+                  "All Books",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23
+                  ),
+                ),
+              ),
+              SizedBox(height: 5,),
+              // Expanded(child: BookListGridView(bookLists: books, currentUserId: currentUserId,))
+              Flexible(
+                // flex: FlexFit.loose,
+                child: BookListGridView(bookLists: books, currentUserId: currentUserId,)
+              )
+            ],
+          ),
+      ),
       // body: BookListGridView(bookLists: books),
       drawer: Drawer(
         width: 270,
@@ -301,16 +412,22 @@ class BookListGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      controller: ScrollController(),
+      // controller: ScrollController(),
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.6,
+          childAspectRatio: 0.65,
+          // childAspectRatio: 1,
           ),
       itemCount: bookLists.length,
       itemBuilder: (context, index) {
-        return BookListCard(
-          bookdetail: bookLists[index],
-          currentUserId: currentUserId,
+        return Padding(
+          padding: const EdgeInsets.all(3),
+          child: BookListCard(
+            bookdetail: bookLists[index],
+            currentUserId: currentUserId,
+          ),
         );
       });
     
@@ -340,47 +457,53 @@ class BookListCard extends StatelessWidget {
           )
         ))
       },
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          // SizedBox(height: 10,),
-          Card(
-            margin: EdgeInsets.fromLTRB(15, 2, 15, 0),
-            elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                width: double.infinity,
-                // height: 245,
-                height: MediaQuery.of(context).size.height/3.5,
-                padding: EdgeInsets.zero,
-                alignment: Alignment.center,
-                child: Image(image: AssetImage(bookdetail.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
-              ),      
+      child: Card(
+        elevation: 5,
+        color: Color.fromARGB(255, 56, 56, 56),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(height: 8,),
+            Card(
+              margin: EdgeInsets.fromLTRB(15, 2, 15, 0),
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height/4.1,
+                  // width: 125,
+                  // height: 200,
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.center,
+                  child: Image(image: AssetImage(bookdetail.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
+                ),      
+              ),
             ),
-          ),
-          SizedBox(height: 5,),
-          Text(
-            '${bookdetail.bookTitle}',
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.fade,
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w700      
+            SizedBox(height: 7,),
+            Text(
+              '${bookdetail.bookTitle}',
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.fade,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700      
+              ),
             ),
-          ),
-          SizedBox(height: 5,),
-          Text(
-            'Rp.${priceFormat.format(bookdetail.bookPrice)}',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: Color.fromARGB(223, 255, 255, 255),
+            SizedBox(height: 5,),
+            Text(
+              'Rp.${priceFormat.format(bookdetail.bookPrice)}',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Color.fromARGB(223, 255, 255, 255),
+              ),
             ),
-          ),
-          // SizedBox(height: 10,),
-        ],
+            // SizedBox(height: 10,),
+          ],
+        ),
       ),
     );
   }
@@ -476,7 +599,25 @@ class LogoutAlert extends StatelessWidget {
 
 
 
+// class LineDashedPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     var paint = Paint()..strokeWidth = 2;
+//     var max = 50;
+//     var dashWidth = 5;
+//     var dashSpace = 5;
+//     double startY = 0;
+//     while (max >= 0) {
+//       canvas.drawLine(Offset(0, startY), Offset(0, startY + dashWidth), paint);
+//       final space = (dashSpace + dashWidth);
+//       startY += space;
+//       max -= space;
+//     }
+//   }
 
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) => false;
+// }
 
 
 

@@ -147,21 +147,31 @@ class _CartPageState extends State<CartPage> {
                                       // width: 130,
                                       // constraints: BoxConstraints.expand(),
                                       child: Column(
+                                        // mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
                                           const SizedBox(
                                             height: 5.0,
                                           ),
-                                          RichText(
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            text: TextSpan(
-                                              text: '${provider.cart[index].bookTitle}\n',
-                                              style: const TextStyle(
-                                                  fontWeight:FontWeight.bold, fontSize: 16
-                                              )
-                                            )
+                                          // RichText(
+                                          //   overflow: TextOverflow.ellipsis,
+                                          //   // maxLines: 1,
+                                          //   text: TextSpan(
+                                          //     text: '${provider.cart[index].bookTitle}',
+                                          //     style: const TextStyle(
+                                          //         fontWeight:FontWeight.bold, fontSize: 16
+                                          //     )
+                                          //   )
+                                          // ),
+                                          Text(
+                                            '${provider.cart[index].bookTitle}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16
+                                            ),
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.fade,
                                           ),
                                           RichText(
                                             maxLines: 1,
