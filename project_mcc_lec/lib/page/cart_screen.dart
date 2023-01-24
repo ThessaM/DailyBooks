@@ -5,7 +5,6 @@ import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/page/paymentpage.dart';
-// import 'package:project_mcc_lec/page/tempFolder/temppage.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
@@ -20,49 +19,25 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
 
   DBHelper? dbHelper = DBHelper();
-  // List<bool> tapped = [];
   var priceFormat = NumberFormat.simpleCurrency(name: '',);
   get currentUserId => widget.currentUserId;
-  // List<Cart> foundCart = [];
-
-  // List<Cart> newCart = [];
-  // Future<List<Cart>> getNewCartData() async{
-  //   List<Cart> newCartList = await dbHelper!.getCartList();
-  //   if(newCartList.isEmpty) return [];
-  //   return newCartList;
-  // }
+ 
   
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // context.read<CartProvider>().getData();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // context.read<CartProvider>().getData();
-      context.read<CartProvider>().getData();
-    // });
+    context.read<CartProvider>().getData();
   }
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
 
-    // final newCart = getNewCartData();
-
-    // void addItemToList(int ind, Cart item){
-    //   setState(() {
-    //     foundCart.insert(ind, item);
-    //   });
-    // }
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('My Shopping Cart'),
-        // leading: IconButton(
-        //   onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage(currentUserId: currentUserId)), (route) => false), 
-        //   icon: Icon(Icons.arrow_back_rounded)
-        // ),
         actions: [
           Badge(
             badgeColor: Colors.black54,
@@ -92,16 +67,6 @@ class _CartPageState extends State<CartPage> {
             child: Consumer<CartProvider>(
               builder: (BuildContext context, provider, widget) {
 
-                // int countItem = 0;
-                // List<Cart> foundCart = [];
-                // for(int i = 0; i<provider.cart.length; i++) {
-                //   if(provider.cart[i].userId == currentUserId){
-                //     // foundCart[countItem] = provider.cart[i];
-                //     addItemToList(countItem, provider.cart[i]);
-                //     countItem++;
-                //   }
-                // }
-
                 if (provider.cart.isEmpty) {
                   return const Center(
                       child: Text(
@@ -130,40 +95,24 @@ class _CartPageState extends State<CartPage> {
                                   Container(
                                     height: 120,
                                     width: 80,
-                                    // constraints: BoxConstraints.expand(),
-                                    // clipBehavior: Clip.hardEdge,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: AssetImage(provider.cart[index].bookPath!),
                                         fit: BoxFit.cover
                                       ),
-                                      // borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))
                                       borderRadius: BorderRadius.circular(15)
                                     ),
                                   ),
                                   SizedBox(width: 5,),
                                   Flexible(
                                     child: Container(
-                                      // width: 130,
-                                      // constraints: BoxConstraints.expand(),
                                       child: Column(
-                                        // mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
                                           const SizedBox(
                                             height: 5.0,
                                           ),
-                                          // RichText(
-                                          //   overflow: TextOverflow.ellipsis,
-                                          //   // maxLines: 1,
-                                          //   text: TextSpan(
-                                          //     text: '${provider.cart[index].bookTitle}',
-                                          //     style: const TextStyle(
-                                          //         fontWeight:FontWeight.bold, fontSize: 16
-                                          //     )
-                                          //   )
-                                          // ),
                                           Text(
                                             '${provider.cart[index].bookTitle}',
                                             style: TextStyle(
@@ -194,7 +143,6 @@ class _CartPageState extends State<CartPage> {
                                     ),
                                   ),
                                   //+- button
-
                                   Row(
                                     children: [
                                       ValueListenableBuilder<int>(
@@ -213,9 +161,7 @@ class _CartPageState extends State<CartPage> {
                                                     quantity: ValueNotifier(
                                                       provider.cart[index].quantity!.value
                                                     ),
-                                                    // quantity: ,
                                                     bookPath: provider.cart[index].bookPath
-                                                    // book: provider.cart[index].book
                                                   ),
                                                 )
                                                 .then((value) {
@@ -240,7 +186,6 @@ class _CartPageState extends State<CartPage> {
                                                     provider.cart[index].quantity!.value
                                                   ),
                                                   bookPath: provider.cart[index].bookPath
-                                                  // book: provider.cart[index].book
                                                 ),
                                               ).then((value) {
                                                 setState(() {
@@ -255,35 +200,32 @@ class _CartPageState extends State<CartPage> {
                                             },
                                             // text: val.toString(),
                                             text: provider.cart[index].quantity!.value.toString(),
-                                            // text: newCart[index].quantity.toString(),
-
                                           );
-                                      }
+                                        }
                                       ),
-                                    Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        ClipOval(child: Container(height: 36, width: 36, color: Colors.red.withOpacity(0.75),)),
-                                        IconButton(
-                                          onPressed: () {
-                                            dbHelper!.deleteCartItem(provider.cart[index].bookId!, currentUserId);
-                                            provider.removeItem(provider.cart[index].bookId!, currentUserId);
-                                            provider.removeCounter();
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                content: Text('Book Removed From Cart', style: TextStyle(color: Colors.deepOrange)),
-                                                duration: Duration(seconds: 1),
-                                              ),
-                                            );
-                                          },
-                                          icon: Icon(
-                                            Icons.delete_forever_rounded,
-                                            // color: Colors.red.shade800,
-                                            color: Colors.white,
-                                          )
-                                        ),
-                                      ],
-                                    ),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          ClipOval(child: Container(height: 36, width: 36, color: Colors.red.withOpacity(0.75),)),
+                                          IconButton(
+                                            onPressed: () {
+                                              dbHelper!.deleteCartItem(provider.cart[index].bookId!, currentUserId);
+                                              provider.removeItem(provider.cart[index].bookId!, currentUserId);
+                                              provider.removeCounter();
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text('Book Removed From Cart', style: TextStyle(color: Colors.deepOrange)),
+                                                  duration: Duration(seconds: 1),
+                                                ),
+                                              );
+                                            },
+                                            icon: Icon(
+                                              Icons.delete_forever_rounded,
+                                              color: Colors.white,
+                                            )
+                                          ),
+                                        ],
+                                      ),
                                       SizedBox(width: 10,)
                                     ],
                                   ),
@@ -303,7 +245,8 @@ class _CartPageState extends State<CartPage> {
                         'Your Cart is Empty',
                         style:
                             TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
-                      ));
+                      )
+                    );
                   }
                 }
               },
@@ -337,12 +280,6 @@ class _CartPageState extends State<CartPage> {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(
-          //     content: Text('Payment Successful'),
-          //     duration: Duration(seconds: 2),
-          //   ),
-          // );
           if(cart.getCounter(currentUserId) == 0){
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -351,13 +288,6 @@ class _CartPageState extends State<CartPage> {
               ),
             );
           }else{
-            // Navigator.push(context, RouterGenerator.generateRoute(
-            //     RouteSettings(
-            //       name: '/payment'
-            //     )
-            //   )
-            // );
-            // print(cart.quantity);
             Navigator.push(
               context, 
               MaterialPageRoute(builder: (context) => PaymentPage(currentUserId: currentUserId))

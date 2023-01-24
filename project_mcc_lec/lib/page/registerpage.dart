@@ -1,13 +1,9 @@
 
-
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/class/user.dart';
 import 'package:project_mcc_lec/page/loginpage.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 /*
 [v] update ui obscure input password;
@@ -91,18 +87,18 @@ class _RegisterState extends State<Register> {
                 // maxLength: 50,
                 obscureText: _isObscure,
                 decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: Icon(!_isObscure ? Icons.visibility : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        _isObscure = !_isObscure;
-                      });
-                    },
-                  ), 
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                  hintText: "Input your password",
-                  labelText: "Password"),
-                  controller: passwordController,
+                suffixIcon: IconButton(
+                  icon: Icon(!_isObscure ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _isObscure = !_isObscure;
+                    });
+                  },
+                ), 
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                hintText: "Input your password",
+                labelText: "Password"),
+                controller: passwordController,
               ),
               SeparatorSizedBoxRegisterPage(),
               TextFormField(

@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "animated_background",
+      "rootUri": "file:///C:/srcApp/flutter/.pub-cache/hosted/pub.dartlang.org/animated_background-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "async",
       "rootUri": "file:///C:/srcApp/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2",
       "packageUri": "lib/",
@@ -398,7 +404,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-01-24T11:45:47.002359Z",
+  "generated": "2023-01-24T15:43:26.826583Z",
   "generator": "pub",
   "generatorVersion": "2.17.3"
 }

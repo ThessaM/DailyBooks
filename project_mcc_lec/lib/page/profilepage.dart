@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/user.dart';
@@ -33,7 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
     XFile? galleryImage;
     try{
       galleryImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-      // User updateUser = await dbHelper.getCurrentUserById(currentUserId);
 
       if(galleryImage == null){
         return;
@@ -113,7 +110,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               ? DecorationImage(
                                   image: AssetImage(defaultImage), scale: 0.3)
                               : DecorationImage(
-                                  // image: FileImage(pickedGalleryImage!),
                                   image: FileImage(File(snapshot.data!.profileImage!)),
                                   fit: BoxFit.cover)
                           ),
@@ -129,7 +125,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: IconButton(
                           onPressed: () async {
                             PickGalleryImage(snapshot.data!);
-                            //jgn lupa save ke database
                           },
                           icon: const Icon(
                             Icons.collections_rounded,

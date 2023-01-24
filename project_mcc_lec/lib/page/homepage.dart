@@ -12,12 +12,11 @@ import 'package:project_mcc_lec/class/book.dart';
 import 'package:project_mcc_lec/page/bookdetailpage.dart';
 import 'package:project_mcc_lec/page/historypage.dart';
 import 'package:project_mcc_lec/class/route.dart';
-import 'package:project_mcc_lec/page/paymentpage.dart';
 import 'package:project_mcc_lec/page/profilepage.dart';
 
 
 /*
-[] ambil database -> -> drawer -> profile image
+[v] ambil database -> -> drawer -> profile image
 [v] ambil database -> drawer -> username
 [v] navigasi drawer -> profile page
 [v] navigasi drawer -> history
@@ -150,9 +149,7 @@ class _HomePageState extends State<HomePage> {
                   margin: EdgeInsets.fromLTRB(5, 10, 5, 15),
                   child: ClipRRect(
                     child: Container(
-                      // clipBehavior: Clip.antiAlias,
                       width: double.infinity,
-                      // height: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         gradient: LinearGradient(
@@ -199,7 +196,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
       ),
-      // body: BookListGridView(bookLists: books),
       drawer: Drawer(
         width: 270,
         child: 
@@ -215,36 +211,30 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(left: 16, right: 16),
                     child: Row(
                       children: [
-                        // ClipOval(
-                          // child: 
-                          Container(
-                            width: 75,
-                            //bisa diatur lagi sesuai database
-                            decoration: BoxDecoration(
-                            // borderRadius: BorderRadius.circular(20),
-                              shape: BoxShape.circle,
-                              color: Colors.grey,
-                              // image: pickedGalleryImage == null
-                              image: snapshot.data!.profileImage == '0'
-                                  ? DecorationImage(
-                                      image: AssetImage('assets/Logo/profile_default.jpg'))
-                                  : DecorationImage(
-                                      // image: FileImage(pickedGalleryImage!),
-                                      image: FileImage(File(snapshot.data!.profileImage!)),
-                                      fit: BoxFit.cover)
-                              ),
-                            // child: snapshot.data!.profileImage == '0'?
-                            // Image(image: AssetImage('assets/Logo/profile_default.jpg'))
-                            // : Image.file(File(snapshot.data!.profileImage!))
-                          ),
-                        // ),
+                        Container(
+                          width: 75,
+                          decoration: BoxDecoration(
+                          // borderRadius: BorderRadius.circular(20),
+                            shape: BoxShape.circle,
+                            color: Colors.grey,
+                            // image: pickedGalleryImage == null
+                            image: snapshot.data!.profileImage == '0'
+                                ? DecorationImage(
+                                    image: AssetImage('assets/Logo/profile_default.jpg'))
+                                : DecorationImage(
+                                    // image: FileImage(pickedGalleryImage!),
+                                    image: FileImage(File(snapshot.data!.profileImage!)),
+                                    fit: BoxFit.cover)
+                            ),
+                          // child: snapshot.data!.profileImage == '0'?
+                          // Image(image: AssetImage('assets/Logo/profile_default.jpg'))
+                          // : Image.file(File(snapshot.data!.profileImage!))
+                        ),                      
                         SizedBox(width: 10,),
-                        //ubah sesuai nama user ${username}
                         Flexible(
                           child: Text(
                             // "username",
                             snapshot.data!.username,
-                            // currentUserData!.username,
                             style: TextStyle(
                               fontSize: 23
                             ),
@@ -263,7 +253,6 @@ class _HomePageState extends State<HomePage> {
             HomePageDrawerListTile(
               tileName: "Profile", 
               tileIcon: Icon(Icons.account_circle_rounded, size: 36,), 
-              //ubah sesuai page profile
               tileRoute: ProfilePage(currentUserId: currentUserId)
             ),
             HomePageDrawerListTile(
@@ -287,7 +276,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 leading: Icon(Icons.logout, size: 36,),
                 horizontalTitleGap: 15,
-                //atur navigasi ke profile page
                 onTap: () =>
                   {showDialog(context: context, builder: (_) => LogoutAlert())},
               ),
@@ -304,13 +292,6 @@ class _HomePageState extends State<HomePage> {
           child: FloatingActionButton(
             onPressed: () =>
               Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(currentUserId: currentUserId,))),
-              // Navigator.pushAndRemoveUntil(
-              //   context, 
-              //   MaterialPageRoute(builder: (context) => CartPage(currentUserId: currentUserId)),
-              //   (route) => false
-              // ),
-              // Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage(books: books, bookIndex: 0,))),
-              //ganti route ke cart page
             child: Icon(Icons.shopping_cart_outlined),
           ),
         ),
@@ -449,7 +430,6 @@ class BookListCard extends StatelessWidget {
     var priceFormat = NumberFormat.simpleCurrency(name: '',);
     return GestureDetector(
       onTap: () => {
-        //ubah ke detail book page
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => BookDetailPage(
             selectedBook: bookdetail,
@@ -529,7 +509,6 @@ class HomePageDrawerListTile extends StatelessWidget {
         ),
         leading: tileIcon,
         horizontalTitleGap: 15,
-        //atur navigasi ke history page
         // onTap: () => Navigator.push(
         //   context, 
         //   // RouterGenerator.generateRoute(RouteSettings(name: '${tileRoute}'))
@@ -573,8 +552,6 @@ class LogoutAlert extends StatelessWidget {
             onPressed: () => {
               Navigator.pushAndRemoveUntil(
                   context,
-                  // ku ganti ke login page yaa
-                  //okee
                   RouterGenerator.generateRoute(RouteSettings(name: '/')),
                   (route) => false)
             },
@@ -583,14 +560,12 @@ class LogoutAlert extends StatelessWidget {
         CupertinoDialogAction(
           child: Text('Cancel'),
           textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-          // textStyle: TextStyle(fontWeight: FontWeight.w600),
           onPressed: () {
             Navigator.pop(context);
           },
         )
       ],
       elevation: 24,
-      // backgroundColor: Color.fromARGB(240, 255, 255, 255),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
     );

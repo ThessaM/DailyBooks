@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/history.dart';
@@ -10,7 +8,7 @@ import 'package:project_mcc_lec/page/paymentpage.dart';
 
 
 /*
-[] connect ke database
+[v] connect ke database
 */
 
 
@@ -111,13 +109,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                   fontWeight: FontWeight.w700
                                 ),
                               ),
-                              // Text(
-                              //   'Rp. ${priceFormat.format(transactionList[index].totalPrice)}', 
-                              //   style: TextStyle(
-                              //     fontSize: 18,
-                              //     fontWeight: FontWeight.w700
-                              //   ),
-                              // ),
                             ],
                           ),
                           SizedBox(height: 5,),
@@ -169,7 +160,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                             
                                             Text(
                                               '${historyList.qty} x Rp. ${priceFormat.format(historyList.bookPrice)}',
-                                              // '${historyList[historyIndex].qty}       ',
                                               style:  TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w400

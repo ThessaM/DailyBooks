@@ -3,15 +3,10 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:project_mcc_lec/cart_screen.dart';
-// import 'package:flutter/src/foundation/key.dart';
-// import 'package:flutter/src/widgets/framework.dart';
 import 'package:project_mcc_lec/class/book.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
-// import 'package:project_mcc_lec/homepage.dart';
-import 'package:project_mcc_lec/class/route.dart';
 import 'package:provider/provider.dart';
 
 
@@ -131,8 +126,7 @@ class BookDetailPage extends StatelessWidget {
                   'Rp.${priceFormat.format(selectedBook.bookPrice)}',
                   style: TextStyle(
                     fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                    // color: Color.fromARGB(255, 92, 92, 92)     
+                    fontWeight: FontWeight.w500,    
                   ),
                 ),
                 BookDetailSeparator(),
@@ -189,7 +183,7 @@ class BookDetailPage extends StatelessWidget {
                   textAlign: TextAlign.justify,
                 ),
                 BookDetailSeparator(value: 70,),
-                // ElevatedButton( // login button
+                // ElevatedButton( 
                 //   onPressed: () {
                 //     // tambahin ke cart + database                 
                 //     // Navigator.push(context, RouterGenerator.generateRoute(
@@ -238,8 +232,7 @@ class BookDetailPage extends StatelessWidget {
               showDialog(
                   context: context, 
                   builder: (_) => AddBookToCartAlertDialog()
-              );
-              
+              );  
             }, 
             label: Text('Add To Cart', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
           ),
@@ -262,8 +255,6 @@ class BookDetailSeparator extends StatelessWidget {
   }
 }
 
-
-
 class FavoriteButton extends StatefulWidget {
   const FavoriteButton({Key? key}) : super(key: key);
 
@@ -280,7 +271,6 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //kurang disambungin sama database
         setState(() {
           if(favoriteValue == false){
           favoriteValue = true;
@@ -305,23 +295,18 @@ class AddBookToCartAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      // insetPadding: EdgeInsets.all(75),
       title: Text("Book added to cart successfully", textAlign: TextAlign.center,),
       titleTextStyle: const TextStyle(
-        // color: Colors.black,
         fontSize: 20,
         fontWeight: FontWeight.w500
       ),
       content: Text("Tap anywhere outside this box to continue", textAlign: TextAlign.center,),
       contentTextStyle: const TextStyle(
-        // color: Colors.grey
         color: Colors.deepOrange
       ),
-      // contentPadding: EdgeInsets.fromLTRB(36, 20, 36, 36),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20)
       ),
-      // alignment: Alignment.center,
     );
   }
 }

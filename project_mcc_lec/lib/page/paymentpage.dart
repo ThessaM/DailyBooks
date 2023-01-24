@@ -1,26 +1,20 @@
 // import 'dart:html';
-
 // import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/history.dart';
-import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/class/transaction.dart';
-import 'package:project_mcc_lec/page/cart_screen.dart';
 import 'package:project_mcc_lec/page/homepage.dart';
 import 'package:provider/provider.dart';
 
 
 /*
 [v] validasi address
-[] update database history
+[v] update database history
 */
 
 
@@ -173,8 +167,6 @@ class _PaymentPageState extends State<PaymentPage> {
                     itemBuilder: (BuildContext context, index) {
                       // print(value.cart[index].quantity);
                       if(value.cart[index].userId == currentUserId){
-                        // print(value.cart[index].quantity!.value);
-                        // print(value.cart);
                         return Padding(
                           padding: const EdgeInsets.only(top: 5),
                           child: Table(
@@ -274,7 +266,6 @@ class _PaymentPageState extends State<PaymentPage> {
                   });
                 },
                 icon: Icon(Icons.expand_more_rounded),
-                // hint: Text("Choose Fish Type Here"),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -284,11 +275,8 @@ class _PaymentPageState extends State<PaymentPage> {
               Center(
                 child: ElevatedButton( // login button
                   onPressed: (){
-                    //validasi address
                     if(validasi(addressController, context)){
-                      //tambah update database
                       saveTransactionHistory();
-                      // cart.clearCart(currentUserId);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context)=>HomePage(currentUserId: currentUserId))
@@ -359,7 +347,6 @@ class ViewTotalPrice extends StatelessWidget {
           ),
           Text(
             value.toString(),
-            // style: Theme.of(context).textTheme.subtitle2,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w500
@@ -405,23 +392,18 @@ class SuccessPaymentAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      // insetPadding: EdgeInsets.all(75),
       title: Text("Payment Success", textAlign: TextAlign.center,),
       titleTextStyle: const TextStyle(
-        // color: Colors.black,
         fontSize: 20,
         fontWeight: FontWeight.w500
       ),
       content: Text("Tap anywhere outside this box to continue", textAlign: TextAlign.center,),
       contentTextStyle: const TextStyle(
-        // color: Colors.grey
         color: Colors.deepOrange
       ),
-      // contentPadding: EdgeInsets.fromLTRB(36, 20, 36, 36),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20)
       ),
-      // alignment: Alignment.center,
     );
   }
 }
