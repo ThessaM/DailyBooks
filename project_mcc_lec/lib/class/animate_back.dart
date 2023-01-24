@@ -24,11 +24,11 @@ class _AnimatedBackgroundCustomState extends State<AnimatedBackgroundCustom> wit
     // opacityChangeRate: 10,
     // minOpacity: 0.1,
     // maxOpacity: 0.4,
-    spawnMinSpeed: 50,
-    spawnMaxSpeed: 100,
+    spawnMinSpeed: 30,
+    spawnMaxSpeed: 80,
     spawnMinRadius: 20,
-    spawnMaxRadius: 70,
-    particleCount: 10,
+    spawnMaxRadius: 60,
+    particleCount: 12,
   );
 
   var particlePaint = Paint()
