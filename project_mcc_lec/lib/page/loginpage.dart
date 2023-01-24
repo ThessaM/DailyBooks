@@ -1,4 +1,5 @@
 // import 'package:flutter/cupertino.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mcc_lec/class/auth_service.dart';
 import 'package:project_mcc_lec/class/route.dart';
@@ -9,6 +10,11 @@ import 'package:project_mcc_lec/class/route.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
+
+  // Future<FirebaseApp> _initializeFirebase() async {
+  //   FirebaseApp firebaseApp = await Firebase.initializeApp();
+  //   return firebaseApp;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +88,7 @@ class LoginPage extends StatelessWidget {
                     //     )
                     // )
                     // );
-                    AuthService.signInAnunymous();
+                    // AuthService.signInAnunymous();
                   },
                   child: Text(
                     "Login",
