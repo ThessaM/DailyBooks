@@ -19,7 +19,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="BookStory" >
+        android:label="DailyBooks" >
 
         <!-- android:label="project_mcc_lec" -->
         <activity

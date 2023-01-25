@@ -88,7 +88,7 @@ class _LoginPageCardState extends State<LoginPageCard> {
               ),
 
               Text(
-                "BookStory",
+                "DailyBooks",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold

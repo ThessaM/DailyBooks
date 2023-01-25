@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.project_mcc_lec">
    <application
-        android:label="BookStory"
+        android:label="DailyBooks"
         android:name="${applicationName}"      
         android:icon="@mipmap/ic_launcher">
         <!-- android:label="project_mcc_lec" -->

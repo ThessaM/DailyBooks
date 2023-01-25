@@ -395,19 +395,42 @@ class BookSearchDelegate extends SearchDelegate{
       return book.contains(input);
     }).toList();
 
-    return Column(
+    return Stack(
       children: [
-        SizedBox(height: 35,),
-        Expanded(
-          child: BookListGridView(
-            bookLists: bookFound, 
-            currentUserId: currentUserId,
-            choosedScrollPhysics: ScrollPhysics(),
-          )
+        Column(
+          children: [   
+            SizedBox(height: 15,),  
+            Expanded(
+              child: 
+              BookListGridView(
+                bookLists: bookFound, 
+                currentUserId: currentUserId,
+                choosedScrollPhysics: ScrollPhysics(),
+              )
+            )
+          ],
+        ),
+        
+        Container(
+          height: 5,
+          decoration: const BoxDecoration(
+            // color: Color.fromRGBO(48, 48, 48, 1),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 48, 48, 48),
+                offset: Offset(0, 3),
+              ),
+              BoxShadow(
+                color: Color.fromARGB(255, 48, 48, 48),
+                offset: Offset(0, 10),
+                blurRadius: 10,
+                spreadRadius: 10
+              ),
+            ],
+          ),
         )
       ],
     );
-
   }
 
 
