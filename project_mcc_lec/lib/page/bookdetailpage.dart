@@ -7,6 +7,7 @@ import 'package:project_mcc_lec/class/book.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
+import 'package:project_mcc_lec/class/favorite_book.dart';
 import 'package:provider/provider.dart';
 
 
@@ -18,12 +19,18 @@ import 'package:provider/provider.dart';
 */
 
 class BookDetailPage extends StatelessWidget {
-  BookDetailPage({super.key, required this.selectedBook, required this.currentUserId});
+  BookDetailPage({super.key, required this.selectedBook, 
+  required this.currentUserId, 
+  // required this.currentFavoriteState
+  // required this.currentFavoriteBook
+  });
 
   DBHelper dbHelper = DBHelper();
 
   final Book selectedBook;
   final int currentUserId;
+  // FavoriteBook currentFavoriteBook;
+  // final bool currentFavoriteState;
 
   @override
   Widget build(BuildContext context) {
@@ -236,7 +243,11 @@ class BookDetailPage extends StatelessWidget {
             }, 
             label: Text('Add To Cart', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
           ),
-          FavoriteButton()
+          FavoriteButton(
+            bookId: selectedBook.bookId, 
+            userId: currentUserId, 
+            // currentFavoriteState: currentFavoriteBook, 
+          )
         ],
       ),
     );
@@ -256,7 +267,14 @@ class BookDetailSeparator extends StatelessWidget {
 }
 
 class FavoriteButton extends StatefulWidget {
-  const FavoriteButton({Key? key}) : super(key: key);
+  FavoriteButton({Key? key, required this.bookId, required this.userId, 
+  // required this.currentFavoriteState
+  }) : super(key: key);
+
+  final int bookId;
+  final int userId;
+  // bool currentFavoriteState;
+  // FavoriteBook currentFavoriteState;
 
   @override
   State<FavoriteButton> createState() => _FavoriteButtonState();
@@ -264,28 +282,86 @@ class FavoriteButton extends StatefulWidget {
 
 class _FavoriteButtonState extends State<FavoriteButton> {
 
-  bool favoriteValue = false;
-  Icon favoriteIcon = Icon(Icons.favorite_outline_rounded, size: 36,);
+  DBHelper dbHelper = DBHelper();
+
+  get bookId => widget.bookId;
+  get userId => widget.userId;
+  // FavoriteBook get currentFavoriteState => widget.currentFavoriteState;
+
+  // bool favoriteValue = currentFavoriteState;
+  // Icon favoriteIcon = Icon(Icons.favorite_outline_rounded, size: 36,);
+  // late Icon favoriteIcon;
+
+  List<FavoriteBook> favoriteBookList = [];
+  int index = -1;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if(favoriteValue == false){
-          favoriteValue = true;
-          favoriteIcon = Icon(Icons.favorite_rounded, size: 36);
-        }else{
-          favoriteValue = false;
-          favoriteIcon = Icon(Icons.favorite_outline_rounded,  size: 36);
-        }
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.all(15),
-        child: favoriteIcon
-      ),
+
+    // favoriteValue = currentFavoriteState == 0? false:true;
+    return FutureBuilder<FavoriteBook>(
+      future: dbHelper.getCurrentFavoriteById(bookId, userId),
+      builder: (BuildContext context, AsyncSnapshot<FavoriteBook> snapshot){
+        if(!snapshot.hasData){
+            return Text("");
+          }
+
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              if(snapshot.data!.favoriteStatus == 0){
+                snapshot.data!.favoriteStatus = 1;
+                // favoriteIcon = Icon(Icons.favorite_rounded, size: 36);
+              }else{
+                // favoriteValue = false;
+                snapshot.data!.favoriteStatus = 0;
+                // favoriteIcon = Icon(Icons.favorite_outline_rounded,  size: 36);
+              }
+            });
+
+            dbHelper.updateFavoriteStatus(
+              FavoriteBook(
+                bookId: bookId, 
+                userId: userId, 
+                // favoriteStatus: favoriteValue? 1:0
+                favoriteStatus: snapshot.data!.favoriteStatus
+              )
+            );
+
+          },
+          child: Container(
+            margin: EdgeInsets.all(15),
+            child: snapshot.data!.favoriteStatus == 0? Icon(Icons.favorite_outline_rounded,  size: 36):Icon(Icons.favorite_rounded, size: 36)
+          ),
+        );
+      }
     );
+    
+    
+    
+    // IconButton(
+    //   onPressed: () async{
+    //     setState(() {
+    //       favoriteValue = !favoriteValue;
+    //     });
+
+        // dbHelper.updateFavoriteStatus(
+        //   FavoriteBook(
+        //     bookId: bookId, 
+        //     userId: userId, 
+        //     favoriteStatus: favoriteValue == true? 1:0
+        //   )
+        // );
+    //   },
+    //   icon: favoriteValue? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded)
+    //   // icon: favoriteIcon,
+    // );
   }
 }
 

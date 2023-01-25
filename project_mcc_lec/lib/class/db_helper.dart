@@ -1,4 +1,5 @@
 import 'package:project_mcc_lec/class/cart_model.dart';
+import 'package:project_mcc_lec/class/favorite_book.dart';
 import 'package:project_mcc_lec/class/history.dart';
 import 'package:project_mcc_lec/class/transaction.dart';
 import 'package:project_mcc_lec/class/user.dart';
@@ -40,17 +41,23 @@ class DBHelper {
       'DROP TABLE IF EXISTS history'
     );
     await db.execute(
+      'DROP TABLE IF EXISTS favorite'
+    );
+    await db.execute(
         'CREATE TABLE cart(id INTEGER, bookId INTEGER, userId INTEGER, bookTitle VARCHAR, bookPrice INTEGER, quantity INTEGER, bookPath TEXT, PRIMARY KEY(bookId, UserId))'
-      );
+    );
     await db.execute(
         'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR, email TEXT, phoneNumber TEXT, password TEXT, profileImage TEXT)'
-      );
+    );
     await db.execute(
       'CREATE TABLE transactionHeader(id INTEGER PRIMARY KEY , userId INTEGER, purchaseDate TEXT, totalPrice INTEGER, totalItem INTEGER)'
     );
     await db.execute(
         'CREATE TABLE history(id INTEGER , bookTitle TEXT, bookPrice INTEGER, bookPath TEXT, qty INTEGER)'
-      );
+    );
+    await db.execute(
+        'CREATE TABLE favorite(bookId INTEGER , userId INTEGER, favoriteStatus INTEGER, PRIMARY KEY(bookId, userId))'
+    );
     
   }
 
@@ -231,6 +238,43 @@ class DBHelper {
     // int amount = (await db!.query("SELECT COUNT (*) FROM user")).length;
     int amount = Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT (*) FROM history')) ?? 0;
     return amount; 
+  }
+
+  //favorite
+  Future<List<FavoriteBook>> getFavorite() async{
+    final db = await database;
+    var favorites = await db!.query('favorite', orderBy: 'bookId');
+    List<FavoriteBook> favoriteList = favorites.isNotEmpty ?
+      favorites.map((e) => FavoriteBook.fromMap(e)).toList()
+      : [];
+    return favoriteList;
+  }
+
+  Future<FavoriteBook> getCurrentFavoriteById(int bookId, int userId) async{
+    final db = await database;
+    var favoriteBooks = await db!.query('favorite', orderBy: 'bookId');
+    List<FavoriteBook> favoriteBookList = favoriteBooks.isNotEmpty ?
+      favoriteBooks.map((e) => FavoriteBook.fromMap(e)).toList()
+      : [];
+    int index = favoriteBookList.indexWhere((element) => element.bookId == bookId && element.userId == userId);
+    return favoriteBookList[index];
+  }
+
+  Future<FavoriteBook> addFavorite(FavoriteBook favoriteBook) async{
+    var db = await database;
+    await db!.insert('favorite', favoriteBook.toMap());
+    return favoriteBook;
+  }
+
+  Future<int> deleteFavorite(int bookId, int userId) async{
+    var db = await database;
+    return await db!.delete('favorite', where: 'bookId = ? AND userId = ?', whereArgs: [bookId, userId]);
+  }
+
+  Future<int> updateFavoriteStatus(FavoriteBook favoriteBook) async {
+    final db = await database;
+    final res = await db!.update('favorite', favoriteBook.toMap(), where: "bookId = ? AND userId = ?", whereArgs: [favoriteBook.bookId, favoriteBook.userId]);
+    return res;
   }
 
 }

@@ -6,9 +6,13 @@ class Book{
   late String bookDescription;
   late String bookPath;
   late String backPath;
+  late int bookPage;
   late double bookRating;
+  late String bookRank;
 
-  Book(int bookId, String bookTitle, String bookAuthor, int bookPrice, String bookDescription, String bookPath, String backPath, double bookRating){
+  Book(int bookId, String bookTitle, String bookAuthor, 
+  int bookPrice, String bookDescription, String bookPath, 
+  String backPath, int bookPage, double bookRating, String bookRank){
     this.bookId = bookId;
     this.bookTitle = bookTitle;
     this.bookAuthor = bookAuthor;
@@ -16,7 +20,9 @@ class Book{
     this.bookDescription = bookDescription;
     this.bookPath = bookPath;
     this.backPath = backPath;
+    this.bookPage = bookPage;
     this.bookRating = bookRating;
+    this.bookRank = bookRank;
   }
 
 }

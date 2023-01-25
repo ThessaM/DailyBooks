@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
+import 'package:project_mcc_lec/class/favorite_book.dart';
 import 'package:project_mcc_lec/class/user.dart';
 import 'package:project_mcc_lec/page/cart_screen.dart';
 import 'package:project_mcc_lec/class/book.dart';
@@ -46,31 +47,73 @@ class _HomePageState extends State<HomePage> {
       0, 
       "Crooked House", 
       "Agatha Christie", 
-      60000, 
+      185000, 
       "Young Sophia returns after the war to find her grandfather poisoned and a family filled with suspects. Luckily her fiancé, Charles, is the son of the assistant commissioner of Scotland Yard.", 
       "assets/Book/CrookedHouse_AgathaChristie.jpg",
-       "assets/Book/CrookedHouse_back.jpeg",
-      4.5
+      "assets/Book/CrookedHouse_back.jpeg",
+      256,
+      4.6,
+      "#46,149"
     ),
     Book(
       1, 
       "The Case Book of Sherlock Holmes", 
       "Sir Arthur Conan Doyle", 
-      86000, 
+      67000, 
       "the final set of twelve Sherlock Holmes short stories", 
       "assets/Book/TheCaseBookOfSherlockHolmes_SirArthur.jpg",
-      "assets/Book/TheCaseBookOfSherlockHolmes_back.jpg" ,
-      5
+      "assets/Book/TheCaseBookOfSherlockHolmes_back.jpg",
+      303,
+      4.1,
+      "#109,212"
     ),
     Book(
       2, 
       "Sophie's World", 
       "Jostein Gaarder", 
-      72000, 
+      157000, 
       "Sophie Amundsen, a Norwegian teenager, who is introduced to the history of philosophy as she is asked, 'Who Are You?'", 
       "assets/Book/DuniaSophie_JosteinGaarder.jpg", 
       "assets/Book/DuniaSophie_back.jpg",
-      4.5
+      544,
+      4.5,
+      "#6,989"
+    ),
+    Book(
+      3, 
+      "The Alchemist", 
+      "Paulo Coelho", 
+      184000, 
+      "Paulo Coelho's masterpiece tells the magical story of Santiago, an Andalusian shepherd boy who yearns to travel in search of a worldly treasure as extravagant as any ever found. The story of the treasures Santiago finds along the way teaches us, as only a few stories can, about the essential wisdom of listening to our hearts, learning to read the omens strewn along life's path, and, above all, following our dreams.", 
+      "assets/Book/TheAlchemist_PauloCoelho.jpg", 
+      "assets/Book/TheAlchemist_back.jpg",
+      208,
+      4.7,
+      "#53"
+    ),
+    Book(
+      4, 
+      "Dear Evan Hansen", 
+      "Val Emmich, Steven Levenson, Benj Pasek, Justin Paul", 
+      181000, 
+      "'Dear Evan Hansen, Today's going to be an amazing day and here's why...' A simple lie leads to complicated truths in this big-hearted coming-of-age story of grief, authenticity, and the struggle to belong in an age of instant connectivity and profound isolation.", 
+      "assets/Book/DearEvanHansen_ValEmmich.jpg", 
+      "assets/Book/DearEvanHansen_back.jpg",
+      368,
+      4.7,
+      "#80,995"
+    ),
+    Book(
+      5, 
+      "Five Feet Apart", 
+      "Rachael Lippincott, Mikki Daughtry, Tobias Laconis", 
+      135000, 
+      "'Can you love someone you can never touch?' Stella Grant likes to be in control—even though her totally out of control lungs have sent her in and out of the hospital most of her life. At this point, what Stella needs to control most is keeping herself away from anyone or anything that might pass along an infection and jeopardize the possibility of a lung transplant. Six feet apart. No exceptions.", 
+      "assets/Book/FiveFeetApart_RachaelLippincott.jpg", 
+      "assets/Book/FiveFeetApart_back.jpg",
+      304,
+      4.8,
+      "#9,155"
     )
   ];
 
@@ -416,7 +459,7 @@ class BookListGridView extends StatelessWidget {
 }
 
 
-class BookListCard extends StatelessWidget {
+class BookListCard extends StatefulWidget {
   const BookListCard({super.key, 
     required this.bookdetail,
     required this.currentUserId
@@ -426,16 +469,53 @@ class BookListCard extends StatelessWidget {
   final int currentUserId;
 
   @override
+  State<BookListCard> createState() => _BookListCardState();
+}
+
+class _BookListCardState extends State<BookListCard> {
+
+  DBHelper dbHelper = DBHelper();
+
+  Book get bookDetail => widget.bookdetail;
+  get currentUserId => widget.currentUserId;
+
+  int index = -1;
+
+  @override
   Widget build(BuildContext context) {
     var priceFormat = NumberFormat.simpleCurrency(name: '',);
     return GestureDetector(
-      onTap: () => {
+      onTap: () async {
+
+        List<FavoriteBook> favoriteBookList = await dbHelper.getFavorite();
+        bool statusRes = false;
+        index = favoriteBookList.indexWhere((element) => element.bookId == bookDetail.bookId && element.userId == currentUserId);
+        print(index);
+        if(index == -1){
+          dbHelper.addFavorite(FavoriteBook(
+            bookId: bookDetail.bookId, 
+            userId: currentUserId, 
+            favoriteStatus: 0
+          ));
+        }
+        // else{
+        //   if(favoriteBookList[index].favoriteStatus == 1){
+        //     statusRes = true;
+        //   }
+        // }
+
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => BookDetailPage(
-            selectedBook: bookdetail,
+            selectedBook: bookDetail,
             currentUserId: currentUserId,
+            // currentFavoriteState: statusRes,
+            // currentFavoriteBook: FavoriteBook(
+            //   bookId: bookDetail.bookId, 
+            //   userId: currentUserId, 
+            //   favoriteStatus: statusRes?1:0
+            // ),
           )
-        ))
+        ));
       },
       child: Card(
         elevation: 5,
@@ -458,13 +538,13 @@ class BookListCard extends StatelessWidget {
                   // height: 200,
                   padding: EdgeInsets.zero,
                   alignment: Alignment.center,
-                  child: Image(image: AssetImage(bookdetail.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
+                  child: Image(image: AssetImage(widget.bookdetail.bookPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity,),
                 ),      
               ),
             ),
             SizedBox(height: 7,),
             Text(
-              '${bookdetail.bookTitle}',
+              '${widget.bookdetail.bookTitle}',
               textAlign: TextAlign.center,
               overflow: TextOverflow.fade,
               style: TextStyle(
@@ -474,7 +554,7 @@ class BookListCard extends StatelessWidget {
             ),
             SizedBox(height: 5,),
             Text(
-              'Rp.${priceFormat.format(bookdetail.bookPrice)}',
+              'Rp.${priceFormat.format(widget.bookdetail.bookPrice)}',
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
