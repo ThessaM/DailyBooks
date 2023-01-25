@@ -48,21 +48,43 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  int getCounter() {
-    _getPrefsItems();
-    return _counter;
+  int getCounter(int userId) {
+
+    int count = 0;
+    for(int i = 0; i<cart.length; i++){
+      if(cart[i].userId == userId){
+        count++;
+      }
+    }
+    // _getPrefsItems();
+    // return _counter;
+    return count;
     // return 0;
   }
 
-  void addQuantity(int id) {
-    final index = cart.indexWhere((element) => element.id == id);
+  int getUniqueCartId(){
+    if(cart.isEmpty) return 0;
+    int newId = cart[cart.length-1].id! + 1;
+    return newId;
+  }
+
+  int getTotalItem() {
+    return cart.length;
+    // return 0;
+  }
+
+  void addQuantity(int bookId, int userId) {
+    final index = cart.indexWhere((element) => element.bookId == bookId && element.userId == userId);
+    // print(index);
+    // print(cart[index].quantity!.value);
     cart[index].quantity!.value = cart[index].quantity!.value + 1;
     _setPrefsItems();
     notifyListeners();
+    // print(cart[index].quantity!.value);
   }
 
-  void deleteQuantity(int id) {
-    final index = cart.indexWhere((element) => element.id == id);
+  void deleteQuantity(int bookId, int userId) {
+    final index = cart.indexWhere((element) => element.bookId == bookId && element.userId == userId);
     final currentQuantity = cart[index].quantity!.value;
     if (currentQuantity <= 1) {
       currentQuantity == 1;
@@ -73,17 +95,19 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeItem(int id) {
-    final index = cart.indexWhere((element) => element.id == id);
+  void removeItem(int bookId, int userId) {
+    final index = cart.indexWhere((element) => element.bookId == bookId && element.userId == userId);
     cart.removeAt(index);
     _setPrefsItems();
     notifyListeners();
   }
 
-  void clearCart(){
-    dbHelper.deleteAll();
-    cart.clear();
+  void clearCart(int userId){
+    dbHelper.deleteAfterPayment(userId);
+    cart.removeWhere((element) => element.userId == userId);
+    // cart.clear();
     _counter = 0;
+    // _counter -= 
     _setPrefsItems();
     notifyListeners();
   }

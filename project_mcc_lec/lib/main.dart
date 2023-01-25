@@ -7,6 +7,7 @@ import 'package:project_mcc_lec/class/route.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

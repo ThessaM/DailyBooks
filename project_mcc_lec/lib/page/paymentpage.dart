@@ -1,26 +1,27 @@
 // import 'dart:html';
+// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
-import 'package:project_mcc_lec/class/route.dart';
-import 'package:project_mcc_lec/page/cart_screen.dart';
+import 'package:project_mcc_lec/class/history.dart';
+import 'package:project_mcc_lec/class/transaction.dart';
+import 'package:project_mcc_lec/page/homepage.dart';
 import 'package:provider/provider.dart';
 
 
 /*
 [v] validasi address
-[] update database history
+[v] update database history
 */
 
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  const PaymentPage({Key? key, required this.currentUserId}) : super(key: key);
+
+  final int currentUserId;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -31,6 +32,8 @@ class _PaymentPageState extends State<PaymentPage> {
   DBHelper dbHelper = DBHelper();
   var priceFormat = NumberFormat.simpleCurrency(name: '',);
   var finalPrice = 0;
+
+  get currentUserId => widget.currentUserId;
 
   int choosedPayment = 0;
 
@@ -52,17 +55,50 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
-    final del = Provider.of<CartProvider>(context, listen: false);
+    // final del = Provider.of<CartProvider>(context, listen: false);
+
+    void saveTransactionHistory() async {
+      int currentTransactionId = await dbHelper.getAmountTransactionHeader();
+      List<Cart> cartList = await dbHelper.getCartList();
+      int currentUserTotalItem = 0;
+      // var currentaDate = DateTime.now();
+
+      print('cart amount ${cartList.length}');
+
+      for(int i = 0; i<cartList.length; i++){
+        print('looping ${cartList.length}');
+        if(cartList[i].userId == currentUserId){
+          dbHelper.addHistory(
+            History(
+              id: currentTransactionId,
+              bookTitle: cartList[i].bookTitle!, 
+              bookPrice: cartList[i].bookPrice!, 
+              bookPath: cartList[i].bookPath!, 
+              qty: cartList[i].quantity!.value
+            )
+          );
+          currentUserTotalItem++;
+        }
+      }
+
+      dbHelper.addTransactionHeader(
+        TransactionHeader(
+          id: currentTransactionId,
+          userId: currentUserId, 
+          purchaseDate: DateFormat("dd-MM-yyy").format(DateTime.now()), 
+          totalPrice: finalPrice, 
+          totalItem: currentUserTotalItem
+        )
+      );
+
+      cart.clearCart(currentUserId);
+    }
+
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Payment'),
-        actions: [
-          
-          const SizedBox(
-            width: 20.0,
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -121,52 +157,64 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 8,),
               Consumer<CartProvider>(
                 builder: (BuildContext context, value, child) {
                   return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: cart.getCounter(),
-                    itemBuilder: (context, index) => Table(
-                      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                      // defaultColumnWidth: FlexColumnWidth(),
-                      // columnWidths: const <int, TableColumnWidth>{
-                      //   0: FlexColumnWidth(),
-                      //   1: FixedColumnWidth(40),
-                      //   2: FlexColumnWidth(),
-                      // },
-                      children: [
-                        TableRow(
-                          children:  [
-                            Text(
-                              "${value.cart[index].bookTitle}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w300      
-                              ),
-                            ),
-                            Text(
-                              "${value.cart[index].quantity!.value}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w300      
-                              ),
-                            ),
-                            Text(
-                              // "Rp. ${priceFormat.format(value.cart[index].bookPrice)}",
-                              "Rp. ${priceFormat.format(value.cart[index].bookPrice! * value.cart[index].quantity!.value)}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w300      
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
+                    // itemCount: cart.getCounter(currentUserId),
+                    itemCount: cart.getTotalItem(),
+                    itemBuilder: (BuildContext context, index) {
+                      // print(value.cart[index].quantity);
+                      if(value.cart[index].userId == currentUserId){
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Table(
+                            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                            // defaultColumnWidth: FlexColumnWidth(),
+                            // columnWidths: const <int, TableColumnWidth>{
+                            //   0: FlexColumnWidth(),
+                            //   1: FixedColumnWidth(40),
+                            //   2: FlexColumnWidth(),
+                            // },
+                            children: [
+                              TableRow(
+                                children:  [
+                                  Text(
+                                    "${value.cart[index].bookTitle}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300      
+                                    ),
+                                  ),
+                                  Text(
+                                    "${value.cart[index].quantity!.value}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300      
+                                    ),
+                                  ),
+                                  Text(
+                                    // "Rp. ${priceFormat.format(value.cart[index].bookPrice)}",
+                                    "Rp. ${priceFormat.format(value.cart[index].bookPrice! * value.cart[index].quantity!.value)}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300      
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      }else{
+                        return SizedBox.shrink();
+                        // return Container();
+                      }
+                    }
                   );
                 }
               ),
@@ -179,10 +227,12 @@ class _PaymentPageState extends State<PaymentPage> {
               builder: (BuildContext context, value, Widget? child) {
                 final ValueNotifier<int?> totalPrice = ValueNotifier(null);
                   for (var element in value.cart) {
-                    totalPrice.value =
-                        (element.bookPrice! * element.quantity!.value) +
-                            (totalPrice.value ?? 0);
-                    finalPrice = totalPrice.value ?? 0;
+                    if(element.userId == currentUserId){
+                      totalPrice.value =
+                          (element.bookPrice! * element.quantity!.value) +
+                              (totalPrice.value ?? 0);
+                      finalPrice = totalPrice.value ?? 0;
+                    }
                   }
       
                   return Column(
@@ -216,7 +266,6 @@ class _PaymentPageState extends State<PaymentPage> {
                   });
                 },
                 icon: Icon(Icons.expand_more_rounded),
-                // hint: Text("Choose Fish Type Here"),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -226,23 +275,12 @@ class _PaymentPageState extends State<PaymentPage> {
               Center(
                 child: ElevatedButton( // login button
                   onPressed: (){
-                    //validasi address
                     if(validasi(addressController, context)){
-                      //tambah update database
-                      // cart.removeAllItem();
-                      // for(int i = cart.getCounter()-1; i>=0; i--){
-                        // dbHelper.deleteCartItem(i);
-                        
-                        // cart.removeAllItem();
-                        // cart.removeCounter();
-                      // }
-                      // Provider.of<CartProvider>(context).cart.clear();
-                      del.clearCart();
-                      Navigator.push(context, RouterGenerator.generateRoute(
-                        RouteSettings(
-                          name: '/home',
-                        )
-                      ));
+                      saveTransactionHistory();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=>HomePage(currentUserId: currentUserId))
+                      );
                       showDialog(
                           context: context, 
                           builder: (_) => SuccessPaymentAlertDialog()
@@ -309,7 +347,6 @@ class ViewTotalPrice extends StatelessWidget {
           ),
           Text(
             value.toString(),
-            // style: Theme.of(context).textTheme.subtitle2,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w500
@@ -355,23 +392,18 @@ class SuccessPaymentAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      // insetPadding: EdgeInsets.all(75),
       title: Text("Payment Success", textAlign: TextAlign.center,),
       titleTextStyle: const TextStyle(
-        // color: Colors.black,
         fontSize: 20,
         fontWeight: FontWeight.w500
       ),
       content: Text("Tap anywhere outside this box to continue", textAlign: TextAlign.center,),
       contentTextStyle: const TextStyle(
-        // color: Colors.grey
         color: Colors.deepOrange
       ),
-      // contentPadding: EdgeInsets.fromLTRB(36, 20, 36, 36),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20)
       ),
-      // alignment: Alignment.center,
     );
   }
 }

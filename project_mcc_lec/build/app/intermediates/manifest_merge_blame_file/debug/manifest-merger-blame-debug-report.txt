@@ -19,55 +19,75 @@
 17    <application
 18        android:name="android.app.Application"
 19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-19-->[androidx.core:core:1.6.0] C:\Users\asus\.gradle\caches\transforms-3\acbce933e4b464a5224ed377a62db1f5\transformed\core-1.6.0\AndroidManifest.xml:24:18-86
+19-->[androidx.core:core:1.8.0] C:\Users\asus\.gradle\caches\transforms-3\d363e3b5616f580c766e3e2b3c05f27d\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
 20        android:debuggable="true"
 21        android:icon="@mipmap/ic_launcher"
-22        android:label="project_mcc_lec" >
-23        <activity
-24            android:name="com.example.project_mcc_lec.MainActivity"
-25            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-26            android:exported="true"
-27            android:hardwareAccelerated="true"
-28            android:launchMode="singleTop"
-29            android:theme="@style/LaunchTheme"
-30            android:windowSoftInputMode="adjustResize" >
-31
-32            <!--
-33                 Specifies an Android theme to apply to this Activity as soon as
-34                 the Android process has started. This theme is visible to the user
-35                 while the Flutter UI initializes. After that, this theme continues
-36                 to determine the Window background behind the Flutter UI.
-37            -->
-38            <meta-data
-39                android:name="io.flutter.embedding.android.NormalTheme"
-40                android:resource="@style/NormalTheme" />
-41
-42            <intent-filter>
-43                <action android:name="android.intent.action.MAIN" />
-44
-45                <category android:name="android.intent.category.LAUNCHER" />
-46            </intent-filter>
-47        </activity>
-48        <!--
-49             Don't delete the meta-data below.
-50             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-51        -->
-52        <meta-data
-53            android:name="flutterEmbedding"
-54            android:value="2" />
-55
-56        <uses-library
-56-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
-57            android:name="androidx.window.extensions"
-57-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
-58            android:required="false" />
-58-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
-59        <uses-library
-59-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
-60            android:name="androidx.window.sidecar"
-60-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
-61            android:required="false" />
-61-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
-62    </application>
-63
-64</manifest>
+22        android:label="BookStory" >
+23
+24        <!-- android:label="project_mcc_lec" -->
+25        <activity
+26            android:name="com.example.project_mcc_lec.MainActivity"
+27            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+28            android:exported="true"
+29            android:hardwareAccelerated="true"
+30            android:launchMode="singleTop"
+31            android:theme="@style/LaunchTheme"
+32            android:windowSoftInputMode="adjustResize" >
+33
+34            <!--
+35                 Specifies an Android theme to apply to this Activity as soon as
+36                 the Android process has started. This theme is visible to the user
+37                 while the Flutter UI initializes. After that, this theme continues
+38                 to determine the Window background behind the Flutter UI.
+39            -->
+40            <meta-data
+41                android:name="io.flutter.embedding.android.NormalTheme"
+42                android:resource="@style/NormalTheme" />
+43
+44            <intent-filter>
+45                <action android:name="android.intent.action.MAIN" />
+46
+47                <category android:name="android.intent.category.LAUNCHER" />
+48            </intent-filter>
+49        </activity>
+50        <!--
+51             Don't delete the meta-data below.
+52             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+53        -->
+54        <meta-data
+55            android:name="flutterEmbedding"
+56            android:value="2" />
+57
+58        <provider
+58-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-18:20
+59            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+59-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-82
+60            android:authorities="com.example.project_mcc_lec.flutter.image_provider"
+60-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-74
+61            android:exported="false"
+61-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-37
+62            android:grantUriPermissions="true" >
+62-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-47
+63            <meta-data
+63-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-17:75
+64                android:name="android.support.FILE_PROVIDER_PATHS"
+64-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:16:17-67
+65                android:resource="@xml/flutter_image_picker_file_paths" />
+65-->[:image_picker_android] D:\Users\ASUS\Documents\BINUS SEM 3\MOBI6026001 - Mobile Cloud Computing\Project LEC\ProjectMCC_LEC\project_mcc_lec\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:17:17-72
+66        </provider>
+67
+68        <uses-library
+68-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
+69            android:name="androidx.window.extensions"
+69-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
+70            android:required="false" />
+70-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
+71        <uses-library
+71-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
+72            android:name="androidx.window.sidecar"
+72-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
+73            android:required="false" />
+73-->[androidx.window:window:1.0.0-beta04] C:\Users\asus\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
+74    </application>
+75
+76</manifest>

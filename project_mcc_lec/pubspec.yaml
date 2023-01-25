@@ -41,6 +41,11 @@ dependencies:
   badges: ^2.0.2
   provider: ^6.0.3
   intl: ^0.18.0
+  # carousel_slider: ^4.1.1
+  image_picker: ^0.8.6
+  # easy_image_viewer: ^1.2.0
+  flip_card: ^0.7.0
+  animated_background: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,4 @@
-#Sat Jan 21 15:11:48 ICT 2023
+#Wed Jan 25 16:22:35 ICT 2023
 base.0=D\:\\Users\\ASUS\\Documents\\BINUS SEM 3\\MOBI6026001 - Mobile Cloud Computing\\Project LEC\\ProjectMCC_LEC\\project_mcc_lec\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
