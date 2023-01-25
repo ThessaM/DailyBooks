@@ -130,26 +130,95 @@ class BookDetailPage extends StatelessWidget {
                 ),
                 BookDetailSeparator(),
                 Text(
-                  'Rp.${priceFormat.format(selectedBook.bookPrice)}',
+                  '${selectedBook.bookAuthor}',
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,    
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: Color.fromARGB(223, 255, 255, 255),
+                  ),
+                  textAlign: TextAlign.justify,
+                ),
+                BookDetailSeparator(value: 20,),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Color.fromARGB(255, 73, 73, 73)),
+                  height: 100,
+                  width: 400,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Rating"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${selectedBook.bookRating} / 5',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Icon(Icons.star_rate_rounded, color: Colors.amber,)
+                            ],
+                          ),
+                        ],
+                      ),
+                      Container(
+                        width: 2,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(223, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(50)
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Price"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Rp.${priceFormat.format(selectedBook.bookPrice)}',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                              // color: Color.fromARGB(255, 92, 92, 92)     
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                BookDetailSeparator(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Rating: ${selectedBook.bookRating}/5',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Icon(Icons.star_rate_rounded, color: Colors.amber,)
-                  ],
-                ),
+                // Text(
+                //   'Rp.${priceFormat.format(selectedBook.bookPrice)}',
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.w500,    
+                //   ),
+                // ),
+                // BookDetailSeparator(),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       'Rating: ${selectedBook.bookRating}/5',
+                //       style: TextStyle(
+                //         fontSize: 20,
+                //         fontWeight: FontWeight.w700,
+                //       ),
+                //     ),
+                //     Icon(Icons.star_rate_rounded, color: Colors.amber,)
+                //   ],
+                // ),
                 BookDetailSeparator(value: 20,),
                 Text(
                   'Synopsis',
@@ -171,24 +240,6 @@ class BookDetailPage extends StatelessWidget {
                   textAlign: TextAlign.justify,
                 ),
                 BookDetailSeparator(),
-                Text(
-                  'Author',
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700      
-                  ),
-                ),
-                Text(
-                  '${selectedBook.bookAuthor}',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(223, 255, 255, 255),
-                  ),
-                  textAlign: TextAlign.justify,
-                ),
                 BookDetailSeparator(value: 70,),
                 // ElevatedButton( 
                 //   onPressed: () {
@@ -226,29 +277,50 @@ class BookDetailPage extends StatelessWidget {
       //atur action
       // floatingActionButton: FavoriteButton(),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: 100,),
-          FloatingActionButton.extended(
-            // heroTag: "Test",
-            // elevation: 3,
-            onPressed: () {
-              saveData(selectedBook.bookId);
-              Navigator.pop(context);
-              showDialog(
-                  context: context, 
-                  builder: (_) => AddBookToCartAlertDialog()
-              );  
-            }, 
-            label: Text('Add To Cart', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+      floatingActionButton: Container(
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(width: 100,),
+              FloatingActionButton.extended(
+                // heroTag: "Test",
+                // elevation: 3,
+                onPressed: () {
+                  saveData(selectedBook.bookId);
+                  Navigator.pop(context);
+                  showDialog(
+                      context: context, 
+                      builder: (_) => AddBookToCartAlertDialog()
+                  );  
+                }, 
+                label: Text('Add To Cart', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+              ),
+              FavoriteButton(
+                bookId: selectedBook.bookId, 
+                userId: currentUserId, 
+                // currentFavoriteState: currentFavoriteBook, 
+              )
+            ],
           ),
-          FavoriteButton(
-            bookId: selectedBook.bookId, 
-            userId: currentUserId, 
-            // currentFavoriteState: currentFavoriteBook, 
-          )
-        ],
+        ),
+        height: 60,
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(48, 48, 48, 1),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(48, 48, 48, 1),
+              offset: Offset(0, 20),
+            ),
+            BoxShadow(
+              color: Color.fromRGBO(48, 48, 48, 1),
+              offset: Offset(0, -10),
+              blurRadius: 20,
+              spreadRadius: 20
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -60,7 +60,7 @@ class _HistoryPageState extends State<HistoryPage> {
           if(!snapshot.hasData){
             return Center(
               child: Text(
-                "No Transaction Found", 
+                "No History Found", 
                 style: TextStyle(
                   fontWeight: FontWeight.bold, 
                   fontSize: 18.0
@@ -71,7 +71,7 @@ class _HistoryPageState extends State<HistoryPage> {
             if(snapshot.data!.any((element) => element.userId == currentUserId) == false){
               return Center(
                 child: Text(
-                  "No Transaction Found", 
+                  "No History Found", 
                   style: TextStyle(
                     fontWeight: FontWeight.bold, 
                     fontSize: 18.0
