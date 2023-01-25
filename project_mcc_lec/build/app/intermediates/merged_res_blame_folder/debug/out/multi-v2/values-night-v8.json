@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Users\\ASUS\\Documents\\BINUS SEM 3\\MOBI6026001 - Mobile Cloud Computing\\Project LEC\\ProjectMCC_LEC\\project_mcc_lec\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
+            "outputFile": "D:\\Binus\\Final Project MCC - LEC\\ProjectMCC_LEC\\project_mcc_lec\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
             "map": [
                 {
-                    "source": "D:\\Users\\ASUS\\Documents\\BINUS SEM 3\\MOBI6026001 - Mobile Cloud Computing\\Project LEC\\ProjectMCC_LEC\\project_mcc_lec\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "D:\\Binus\\Final Project MCC - LEC\\ProjectMCC_LEC\\project_mcc_lec\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">617705997434-3fqvvf53keftdddbneoaqu2mm23rtvnf.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">617705997434</string>
+    <string name="google_api_key" translatable="false">AIzaSyCabWwjT5uwhipLYKxx_drueVJjwfwhAmE</string>
+    <string name="google_app_id" translatable="false">1:617705997434:android:a709221590c212addbe7c3</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCabWwjT5uwhipLYKxx_drueVJjwfwhAmE</string>
+    <string name="google_storage_bucket" translatable="false">mcclec.appspot.com</string>
+    <string name="project_id" translatable="false">mcclec</string>
+</resources>

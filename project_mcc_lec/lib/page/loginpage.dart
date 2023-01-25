@@ -1,8 +1,11 @@
 // import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_mcc_lec/class/auth_service.dart';
 import 'package:project_mcc_lec/class/route.dart';
+import 'package:project_mcc_lec/page/homepage.dart';
 
 /*
 [] validasi (login) & API 
@@ -11,19 +14,17 @@ import 'package:project_mcc_lec/class/route.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
-  // Future<FirebaseApp> _initializeFirebase() async {
-  //   FirebaseApp firebaseApp = await Firebase.initializeApp();
-  //   return firebaseApp;
-  // }
+  Future<FirebaseApp> _initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
+    return firebaseApp;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   title: Text('Login'),
-      // ),
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
 
+    return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),
@@ -49,11 +50,12 @@ class LoginPage extends StatelessWidget {
 
                 TextFormField(
                   // username
+                  controller: emailController,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      hintText: "Input your Username",
-                      labelText: "Username"),
+                      hintText: "Input your Email",
+                      labelText: "Email"),
                 ),
 
                 SizedBox(
@@ -63,6 +65,7 @@ class LoginPage extends StatelessWidget {
 
                 TextFormField(
                   // password,
+                  controller: passwordController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20)),
@@ -81,14 +84,14 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                   // login button
                   onPressed: () async {
-                    // masukin validasi
-                    // Navigator.push(context, RouterGenerator.generateRoute(
-                    //     RouteSettings(
-                    //       name: '/home',
-                    //     )
-                    // )
-                    // );
-                    // AuthService.signInAnunymous();
+                    // try {
+                    //   await FirebaseAuth.instance
+                    //       .createUserWithEmailAndPassword(
+                    //           email: emailController.text,
+                    //           password: passwordController.text);
+                    // } on FirebaseAuthException catch (e) {
+                    //   showNotification(context, e.message.toString());
+                    // }
                   },
                   child: Text(
                     "Login",
@@ -115,13 +118,29 @@ class LoginPage extends StatelessWidget {
 
                 ElevatedButton(
                   // google login button
-                  onPressed: () {
-                    // masukin validasi
-                    Navigator.push(
-                        context,
-                        RouterGenerator.generateRoute(RouteSettings(
-                          name: '/',
-                        )));
+                  onPressed: () async {
+                    if (FirebaseAuth.instance.currentUser == null) {
+                      GoogleSignInAccount? account =
+                          await GoogleSignIn().signIn();
+
+                      if (account != null) {
+                        GoogleSignInAuthentication auth =
+                            await account.authentication;
+                        OAuthCredential credential =
+                            GoogleAuthProvider.credential(
+                                accessToken: auth.accessToken,
+                                idToken: auth.idToken);
+                        await FirebaseAuth.instance
+                            .signInWithCredential(credential);
+
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                            (route) => false);
+                      }
+                    } else {
+                      GoogleSignIn().signOut();
+                      FirebaseAuth.instance.signOut();
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -176,5 +195,11 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void showNotification(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.orange.shade900,
+        content: Text(message.toString())));
   }
 }

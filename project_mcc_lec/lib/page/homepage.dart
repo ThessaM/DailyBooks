@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 horizontalTitleGap: 15,
                 //atur navigasi ke profile page
-                onTap: () => {
+                onTap: () =>  {
                   showDialog(context: context, builder: (_) => LogoutAlert())
                 },
               ),
