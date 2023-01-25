@@ -136,7 +136,7 @@ class BookDetailPage extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     color: Color.fromARGB(223, 255, 255, 255),
                   ),
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.center,
                 ),
                 BookDetailSeparator(value: 20,),
                 Container(

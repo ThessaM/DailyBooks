@@ -234,7 +234,11 @@ class _HomePageState extends State<HomePage> {
               // Expanded(child: BookListGridView(bookLists: books, currentUserId: currentUserId,))
               Flexible(
                 // flex: FlexFit.loose,
-                child: BookListGridView(bookLists: books, currentUserId: currentUserId,)
+                child: BookListGridView(
+                  bookLists: books, 
+                  currentUserId: currentUserId,
+                  choosedScrollPhysics: NeverScrollableScrollPhysics(),
+                )
               )
             ],
           ),
@@ -394,7 +398,13 @@ class BookSearchDelegate extends SearchDelegate{
     return Column(
       children: [
         SizedBox(height: 35,),
-        Expanded(child: BookListGridView(bookLists: bookFound, currentUserId: currentUserId,))
+        Expanded(
+          child: BookListGridView(
+            bookLists: bookFound, 
+            currentUserId: currentUserId,
+            choosedScrollPhysics: ScrollPhysics(),
+          )
+        )
       ],
     );
 
@@ -428,17 +438,19 @@ class BookSearchDelegate extends SearchDelegate{
 
 
 class BookListGridView extends StatelessWidget {
-  BookListGridView({super.key, required this.bookLists, required this.currentUserId});
+  BookListGridView({super.key, required this.bookLists, required this.currentUserId, required this.choosedScrollPhysics});
 
   final List <Book> bookLists;
   final int currentUserId;
+  ScrollPhysics choosedScrollPhysics;
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       // controller: ScrollController(),
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      // physics: NeverScrollableScrollPhysics(),
+      physics: choosedScrollPhysics,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.65,
