@@ -11,6 +11,7 @@ import 'package:project_mcc_lec/class/user.dart';
 import 'package:project_mcc_lec/page/cart_screen.dart';
 import 'package:project_mcc_lec/class/book.dart';
 import 'package:project_mcc_lec/page/bookdetailpage.dart';
+import 'package:project_mcc_lec/page/favoritepage.dart';
 import 'package:project_mcc_lec/page/historypage.dart';
 import 'package:project_mcc_lec/class/route.dart';
 import 'package:project_mcc_lec/page/profilepage.dart';
@@ -308,6 +309,12 @@ class _HomePageState extends State<HomePage> {
               tileRoute: HistoryPage(currentUserId: currentUserId)
               // tileRoute: TempPage(),
             ),
+            HomePageDrawerListTile(
+              tileName: "Favorite", 
+              tileIcon: Icon(Icons.favorite_rounded, size: 36,), 
+              tileRoute: FavoriteBookPage(currentUserId: currentUserId, bookList: books)
+              // tileRoute: TempPage(),
+            ),
             SizedBox(
               height: 60,
               child: ListTile(
@@ -543,6 +550,7 @@ class _BookListCardState extends State<BookListCard> {
           builder: (context) => BookDetailPage(
             selectedBook: bookDetail,
             currentUserId: currentUserId,
+            fromPage: 1,
             // currentFavoriteState: statusRes,
             // currentFavoriteBook: FavoriteBook(
             //   bookId: bookDetail.bookId, 

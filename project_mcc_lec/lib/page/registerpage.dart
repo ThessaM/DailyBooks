@@ -130,9 +130,12 @@ class _RegisterState extends State<Register> {
                     //buat cek kalo kesimpen di variabelnya
                     // print(user.username + " " + user.email + " " + user.password);
 
+                    int newUserId = await dbHelper.getAmountUser();
+                    if(newUserId == null) print('no Id');
+
                     await dbHelper.addUser(
                       User(
-                        id: await dbHelper.getAmountUser(), 
+                        id: newUserId, 
                         username: usernameController.text, 
                         email: emailController.text, 
                         phoneNumber: phoneNumberController.text,

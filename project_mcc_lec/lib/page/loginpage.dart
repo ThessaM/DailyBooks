@@ -40,6 +40,14 @@ class LoginPage extends StatelessWidget {
   }
 }
 
+
+// Future<List<User>> findUser() async{
+//   DBHelper dbHelper = DBHelper();
+//   List<User> usersList = await dbHelper.getUser();
+//   return usersList.isEmpty? [] : usersList;
+// }
+
+
 class LoginPageCard extends StatefulWidget {
   const LoginPageCard({Key? key}) : super(key: key);
 
@@ -52,6 +60,7 @@ class _LoginPageCardState extends State<LoginPageCard> {
   DBHelper dbHelper = DBHelper();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  // Future<List<User>> users = findUser();
 
   bool _isObscure = true;
 
@@ -167,6 +176,8 @@ class _LoginPageCardState extends State<LoginPageCard> {
                     List<User> users = await dbHelper.getUser();
                     bool foundUsername = false;
                     bool found = false;
+
+                    // if(users.isEmpty) print("No data");
   
                     if(users.isNotEmpty){
                       for(int i = 0; i<users.length; i++){

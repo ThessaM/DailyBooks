@@ -8,19 +8,22 @@ import 'package:project_mcc_lec/class/cart_model.dart';
 import 'package:project_mcc_lec/class/cartprovider.dart';
 import 'package:project_mcc_lec/class/db_helper.dart';
 import 'package:project_mcc_lec/class/favorite_book.dart';
+import 'package:project_mcc_lec/page/favoritepage.dart';
 import 'package:provider/provider.dart';
 
 
 /*
 [v] atur icon favorite -- floating action button
 [v] sambungin database - data add to cart
-[] sambungin database - favorite, disesuaiin data user
+[v] sambungin database - favorite, disesuaiin data user
 [v] habis add to cart -> lgsg balik ke homepage aja + alert dialog
 */
 
 class BookDetailPage extends StatelessWidget {
   BookDetailPage({super.key, required this.selectedBook, 
-  required this.currentUserId, 
+  required this.currentUserId,
+  required this.fromPage,
+  this.bookList
   // required this.currentFavoriteState
   // required this.currentFavoriteBook
   });
@@ -29,6 +32,8 @@ class BookDetailPage extends StatelessWidget {
 
   final Book selectedBook;
   final int currentUserId;
+  final int fromPage; //1 = homepage, 2 = favoritePage
+  List<Book>? bookList = [];
   // FavoriteBook currentFavoriteBook;
   // final bool currentFavoriteState;
 
@@ -66,7 +71,18 @@ class BookDetailPage extends StatelessWidget {
         title: Text(selectedBook.bookTitle, overflow: TextOverflow.fade,),
         titleSpacing: 0,
         leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () {
+            if(fromPage == 1) Navigator.pop(context);
+            else Navigator.pushAndRemoveUntil(
+              context, 
+              MaterialPageRoute(builder: (context) => FavoriteBookPage(
+                currentUserId: currentUserId, 
+                bookList: bookList!)
+              ), 
+              (route) => false
+            );
+
+          },
           // Navigator.push(
           //   context, 
           //   RouterGenerator.generateRoute(RouteSettings(name: '/home'))
@@ -365,7 +381,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   // late Icon favoriteIcon;
 
   List<FavoriteBook> favoriteBookList = [];
-  int index = -1;
+  // int index = -1;
 
   @override
   void initState() {

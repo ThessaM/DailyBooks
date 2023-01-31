@@ -44,19 +44,18 @@ class DBHelper {
       'DROP TABLE IF EXISTS favorite'
     );
     await db.execute(
-        'CREATE TABLE cart(id INTEGER, bookId INTEGER, userId INTEGER, bookTitle VARCHAR, bookPrice INTEGER, quantity INTEGER, bookPath TEXT, PRIMARY KEY(bookId, UserId))'
-    );
-    await db.execute(
         'CREATE TABLE user( id INTEGER PRIMARY KEY, username VARCHAR, email TEXT, phoneNumber TEXT, password TEXT, profileImage TEXT)'
     );
     await db.execute(
-      'CREATE TABLE transactionHeader(id INTEGER PRIMARY KEY , userId INTEGER, purchaseDate TEXT, totalPrice INTEGER, totalItem INTEGER)'
+        'CREATE TABLE cart(id INTEGER, bookId INTEGER, userId INTEGER, bookTitle VARCHAR, bookPrice INTEGER, quantity INTEGER, bookPath TEXT, PRIMARY KEY(bookId, UserId),FOREIGN KEY (userId) REFERENCES user(id))');
+    await db.execute(
+      'CREATE TABLE transactionHeader(id INTEGER PRIMARY KEY , userId INTEGER, purchaseDate TEXT, totalPrice INTEGER, totalItem INTEGER,FOREIGN KEY (userId) REFERENCES user(id))'
     );
     await db.execute(
-        'CREATE TABLE history(id INTEGER , bookTitle TEXT, bookPrice INTEGER, bookPath TEXT, qty INTEGER)'
+        'CREATE TABLE history(id INTEGER, bookTitle TEXT, bookPrice INTEGER, bookPath TEXT, qty INTEGER,PRIMARY KEY(id, bookTitle)FOREIGN KEY (id) REFERENCES transactionheader(id))'
     );
     await db.execute(
-        'CREATE TABLE favorite(bookId INTEGER , userId INTEGER, favoriteStatus INTEGER, PRIMARY KEY(bookId, userId))'
+        'CREATE TABLE favorite(bookId INTEGER , userId INTEGER, favoriteStatus INTEGER, PRIMARY KEY(bookId, userId)FOREIGN KEY (userId) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE)'
     );
     
   }
