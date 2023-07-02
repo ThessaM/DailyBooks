@@ -1,5 +1,6 @@
 # ProjectMCC_LEC
- Project MCC
+ Group project for Mobile Cloud Computing Course
+ 3rd Semester
 
 ## Kelompok:
  - Thessalonica Maria Luisse Rosaline
